@@ -3,6 +3,7 @@
     "configurations": [
         {
             "name": "Launch",
+            "name": "启动",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/main.js",

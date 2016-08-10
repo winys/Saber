@@ -4,9 +4,7 @@
     "version": "0.1.0",
     "command": "gulp",
     "isShellCommand": true,
-    "args": [
-        "--no-color"
-    ],
+    "args": ["--no-color"],
     "tasks": [
         {
             "taskName": "run", 
