@@ -14,7 +14,7 @@ export default {
       // with hot-reload because the reloaded component
       // preserves its current state and we are modifying
       // its initiadl state.
-      msg: 'Hello World!',
+      msg: 'Saber',
       tt : "winys"
     }
   },
