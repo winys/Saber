@@ -1,4 +1,4 @@
-![](https://raw.github.com/winys/Saber/master/app/assets/logo.jpg)
+![](https://github.com/winys/Saber/blob/master/app/src/assets/logo.png)
 
 # Saber
 
