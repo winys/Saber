@@ -1,64 +1,37 @@
 <template>
   <div id="app">
-    <img class="logo" src="./assets/logo.png">
-    <hello></hello>
-    <p>
-      Welcome to Saber app!
-    </p>
-    <p>
-      A empty toolkit, for you to order.
-    </p>
-    <p>
-      You may also want to checkout
-      <ul class="checkout">
-        <li><a href="https://github.com/vuejs/vue-router/">How to develop a Saber plugin.</a> </li>
-        <li><a href="https://github.com/vuejs/vuex/">How to use Saber for better.</a></li>
-      </ul>
-      
-    </p>
+    <statusbar></statusbar>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
-
+import statusbar from './components/Statusbar';
 export default {
   components: {
-    Hello
+    statusbar
   }
 }
 </script>
 
 <style>
-html {
+div,section,p{
+  box-sizing:border-box;
+  margin: 0;
+  padding: 0;
+}
+html,body{
+  margin: 0;
+  padding: 0;
   height: 100%;
+  width: 100%;
+  font-family: -apple-system,BlinkMacSystemFont,Segoe WPC,Segoe UI,HelveticaNeue-Light,Ubuntu,Droid Sans,sans-serif;
 }
-
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+::selection{
+  background: #ff8f00;
 }
-
-#app {
-  color: #2c3e50;
-  margin-top: -100px;
-  max-width: 600px;
-  font-family: Source Sans Pro, Helvetica, sans-serif;
-  text-align: center;
-}
-
-#app a {
-  color: #42b983;
-  text-decoration: none;
-}
-
-.logo {
-  width: 100px;
-  height: 100px
-}
-.checkout{
-  text-align: left;
+#app{
+  background: #1e1e1e;
+  width:100%;
+  height:100%;
 }
 </style>
