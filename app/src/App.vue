@@ -1,20 +1,22 @@
 <template>
   <div id="app">
+    <message></message>
     <statusbar></statusbar>
   </div>
 </template>
 
 <script>
 import statusbar from './components/Statusbar';
+import message from './components/Message';
 export default {
   components: {
-    statusbar
+    statusbar,message
   }
 }
 </script>
 
 <style>
-div,section,p{
+div,section,ul,p{
   box-sizing:border-box;
   margin: 0;
   padding: 0;

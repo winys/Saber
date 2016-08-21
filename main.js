@@ -1,4 +1,5 @@
 const electron = require('electron')
+const ipc  = electron.ipcMain
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -50,6 +51,12 @@ app.on('activate', function () {
   }
 })
 
+ipc.on('relaunch',(info) => {
+  //TODO: write relaunch log into logfile.
+  console.log(info.code + "::" + info.text)
+  app.relaunch({args: process.argv.slice(1) + ['--relaunch']})
+  app.exit(0)
+})
 // In this file you can include the rest of your app's specific main process
 
 // code. You can also put them in separate files and require them here.
