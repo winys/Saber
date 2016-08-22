@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <message></message>
     <statusbar></statusbar>
     <toolbar></toolbar>
     <workink>
@@ -12,15 +13,16 @@
 import statusbar from './components/Statusbar';
 import toolbar from './components/Toolbar';
 import workink from './components/Workink';
+import message from './components/Message';
 export default {
   components: {
-    statusbar,workink,toolbar
+    statusbar,workink,toolbar,message
   }
 }
 </script>
 
 <style>
-div,section,p{
+div,section,ul,p{
   box-sizing:border-box;
   margin: 0;
   padding: 0;

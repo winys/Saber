@@ -25,7 +25,8 @@ export default {
     },
 
     message: {
-
+        items :[],
+        visiable : true
     },
 
     contextmenu: {

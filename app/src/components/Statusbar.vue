@@ -10,6 +10,14 @@
     export default {
         data (){
             return Saber.statusbar;
+        },
+        methods:{
+            change(){
+                Saber.sendMessage({
+                    type: "tt",
+                    text: "的话就卡时间看电视"
+                });
+            }
         }
     }
 </script>

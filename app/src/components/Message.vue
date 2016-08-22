@@ -1,0 +1,137 @@
+<template>
+    <div class="global-message-list" v-if="visiable" style="top: 0px;">
+        <ul class="message-list">
+            <li class="message-list-entry" v-for="item in items">
+                <div class="message-action">
+                    <a class="restart" v-if="item.restart" tabindex="0" role="button" @click="restart">
+                        立即重启
+                    </a><a class="action-button" tabindex="0" role="button" @click="close">
+                        关闭
+                    </a>
+                </div>
+                 <div class="message-left-side">
+                     <span class="app-info">{{item.type}}</span>
+                     <span class="info-left-side" v-bind="{ title: item.text }">{{item.text}}</span>
+                 </div>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <button @click="change">---------</button>
+    </div>   
+</template>
+
+<script>
+    export default {
+        methods:{
+            change(){
+                Saber.sendMessage({
+                    type: "类型",
+                    text: "You are SaBer",
+                    restart: true
+                },function(){alert("11111")});
+            },
+            close(){
+                Saber.closeMessage({
+                    num: this.index
+                });
+            },
+            restart(){
+                Saber._restart(0, "老子不玩了");
+            }
+        },
+        data (){
+           return Saber.message;
+        }
+    }
+</script>
+
+<style>
+    div {
+        display: block;
+    } 
+    .global-message-list {
+        background-color: #333;
+        box-shadow: 0 2px 8px #000;
+        font-size: 12px;
+        position: absolute;
+        z-index: 2000;
+        color: #eee;
+        list-style-type: none;
+        line-height: 35px;
+        margin: 0;
+        padding: 0;
+        width: 70%;
+        left: 15%;
+    }
+    .message-list {
+        margin: 0;
+        padding: 0;
+    }
+    ul {
+        display: block;
+        list-style-type: disc;
+        -webkit-margin-before: 1em;
+        -webkit-margin-after: 1em;
+        -webkit-margin-start: 0px;
+        -webkit-margin-end: 0px;
+        -webkit-padding-start: 40px;
+    }
+    .message-list-entry {
+        padding-right: 0;
+        padding-left: 10px;
+        overflow: hidden;
+        box-sizing: border-box;
+        height: 35px;
+        display: list-item;
+        text-align: left;
+    }
+    li {
+        box-shadow: 0 2px 8px #000;
+        display: list-item;
+        text-align: -webkit-match-parent;
+    }
+    .message-action {
+        -webkit-user-select: none;
+    }
+    .action-button,.restart {
+        background-color: #0e639c;
+        padding-left: 10px;
+        padding-right: 10px;
+        display: inline-block;
+        color: inherit;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .message-left-side {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        -webkit-user-select: text;
+    }
+    .app-info {
+        background-color: #007acc;
+        padding: 2px 4px;
+        margin-right: 10px;
+        font-weight: 700;
+        font-size: 11px;
+        -webkit-user-select: none;
+    }
+    .info-left-side {
+        -webkit-user-select: text;
+        white-space: nowrap;
+    }
+    .global-message-list li.message-list-entry .message-action {
+        float: right;
+    }
+    a:focus {
+        outline: none;
+    }
+    a:hover {
+        background-color: #007acc;
+    }
+    .info-left-side::selection {
+        background: #007acc;
+    }    
+</style>
