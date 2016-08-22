@@ -1,14 +1,20 @@
 <template>
   <div id="app">
     <statusbar></statusbar>
+    <toolbar></toolbar>
+    <workink>
+      <vue-router></vue-router>
+    </workink>
   </div>
 </template>
 
 <script>
 import statusbar from './components/Statusbar';
+import toolbar from './components/Toolbar';
+import workink from './components/Workink';
 export default {
   components: {
-    statusbar
+    statusbar,workink,toolbar
   }
 }
 </script>

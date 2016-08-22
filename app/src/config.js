@@ -5,7 +5,19 @@ export default {
     },
 
     toolbar:{
-
+        items: [
+            {
+                name: "md5",
+                icon : ""
+            },{
+                name: "md5",
+                icon : ""
+            },{
+                name: "md5",
+                icon : ""
+            }
+        ],
+        visiable : true,
     },
 
     workink:{
