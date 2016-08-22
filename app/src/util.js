@@ -1,11 +1,18 @@
 export default {
     sendMessage ( config, callback ){
         let msg = Saber.message;
-        
+        var bkcolor = "#007acc";
+        if(config.type == "错误"){
+            bkcolor = 'red';
+        }
+        else if(config.type == "警告"){
+            bkcolor = "#ff8f00";
+        }
         msg.items.push({
-            type: config.type || "default",
+            type: config.type || "信息",
             text : config.text || "",
-            restart : config.restart || false
+            restart : config.restart || false,
+            bkcolor : bkcolor
         });
         
         if(msg.items.length>=5){

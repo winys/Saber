@@ -2,34 +2,49 @@
     <div class="global-message-list" v-if="visiable" style="top: 0px;">
         <ul class="message-list">
             <li class="message-list-entry" v-for="item in items">
-                <div class="message-action">
+                <div class="message-action" >
                     <a class="restart" v-if="item.restart" tabindex="0" role="button" @click="restart">
                         立即重启
                     </a><a class="action-button" tabindex="0" role="button" @click="close">
                         关闭
                     </a>
-                </div>
-                 <div class="message-left-side">
-                     <span class="app-info">{{item.type}}</span>
-                     <span class="info-left-side" v-bind="{ title: item.text }">{{item.text}}</span>
+                 </div><div class="message-left-side">
+                     <span class="app-info" v-bind:style="{background: item.bkcolor}">{{item.type}}
+                     </span><span class="info-left-side" v-bind="{ title: item.text }">{{item.text}}</span>
                  </div>
             </li>
         </ul>
     </div>
     <div>
-        <button @click="change">---------</button>
+        <button @click="sendInfo">信息</button><br/>
+        <button @click="sendWarn">警告</button><br/>
+        <button @click="sendErro">错误</button><br/>
     </div>   
 </template>
 
 <script>
     export default {
         methods:{
-            change(){
+            sendInfo(){
                 Saber.sendMessage({
-                    type: "类型",
-                    text: "You are SaBer",
+                    type: "信息",
+                    text: "You are SaBer.",
                     restart: true
-                },function(){alert("11111")});
+                });
+            },
+            sendWarn(){
+                Saber.sendMessage({
+                    type: "警告",
+                    text: "Repeat.You are SaBer.",
+                    restart: false
+                });
+            },
+            sendErro(){
+                Saber.sendMessage({
+                    type: "错误",
+                    text: "Damn.You are SaBer.Bitch!",
+                    restart: false
+                });
             },
             close(){
                 Saber.closeMessage({
@@ -47,9 +62,7 @@
 </script>
 
 <style>
-    div {
-        display: block;
-    } 
+   
     .global-message-list {
         background-color: #333;
         box-shadow: 0 2px 8px #000;
@@ -67,15 +80,8 @@
     .message-list {
         margin: 0;
         padding: 0;
-    }
-    ul {
         display: block;
         list-style-type: disc;
-        -webkit-margin-before: 1em;
-        -webkit-margin-after: 1em;
-        -webkit-margin-start: 0px;
-        -webkit-margin-end: 0px;
-        -webkit-padding-start: 40px;
     }
     .message-list-entry {
         padding-right: 0;
@@ -85,8 +91,6 @@
         height: 35px;
         display: list-item;
         text-align: left;
-    }
-    li {
         box-shadow: 0 2px 8px #000;
         display: list-item;
         text-align: -webkit-match-parent;
