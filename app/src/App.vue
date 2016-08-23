@@ -39,7 +39,4 @@ html,body{
 a:focus {
     outline: none;
 }
-a:hover {
-    background-color: #007acc;
-}
 </style>
