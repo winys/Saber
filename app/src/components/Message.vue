@@ -77,13 +77,13 @@
         width: 70%;
         left: 15%;
     }
-    .message-list {
+    .global-message-list .message-list {
         margin: 0;
         padding: 0;
         display: block;
         list-style-type: disc;
     }
-    .message-list-entry {
+   .global-message-list .message-list-entry {
         padding-right: 0;
         padding-left: 10px;
         overflow: hidden;
@@ -95,10 +95,10 @@
         display: list-item;
         text-align: -webkit-match-parent;
     }
-    .message-action {
+    .global-message-list .message-action {
         -webkit-user-select: none;
     }
-    .action-button,.restart {
+    .global-message-list .action-button,.restart {
         background-color: #0e639c;
         padding-left: 10px;
         padding-right: 10px;
@@ -107,14 +107,14 @@
         text-decoration: none;
         cursor: pointer;
     }
-    .message-left-side {
+    .global-message-list .message-left-side {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         display: block;
         -webkit-user-select: text;
     }
-    .app-info {
+    .global-message-list .app-info {
         background-color: #007acc;
         padding: 2px 4px;
         margin-right: 10px;
@@ -122,20 +122,14 @@
         font-size: 11px;
         -webkit-user-select: none;
     }
-    .info-left-side {
+    .global-message-list .info-left-side {
         -webkit-user-select: text;
         white-space: nowrap;
     }
     .global-message-list li.message-list-entry .message-action {
         float: right;
     }
-    a:focus {
-        outline: none;
-    }
-    a:hover {
-        background-color: #007acc;
-    }
-    .info-left-side::selection {
+    .global-message-list .info-left-side::selection {
         background: #007acc;
     }    
 </style>

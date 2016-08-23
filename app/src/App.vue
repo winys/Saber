@@ -52,4 +52,10 @@ html,body{
   flex-direction: row;
   justify-content: space-around;
 }
+a:focus {
+    outline: none;
+}
+a:hover {
+    background-color: #007acc;
+}
 </style>
