@@ -1,12 +1,15 @@
 <template>
   <div id="app">
-    <message></message>
     <statusbar></statusbar>
+    <div id="main">
     <toolbar></toolbar>
     <workink>
       <vue-router></vue-router>
     </workink>
+    </div>
+    
   </div>
+  <message></message>
 </template>
 
 <script>
@@ -41,5 +44,12 @@ html,body{
   background: #1e1e1e;
   width:100%;
   height:100%;
+  flex-direction: column-reverse;
+  justify-content: space-around;
+}
+#main{
+  flex:1;
+  flex-direction: row;
+  justify-content: space-around;
 }
 </style>

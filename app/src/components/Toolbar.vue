@@ -24,23 +24,21 @@
         left: 0;
     }
     .toolbar-items{
-        display:inline-block;
         margin: 0 auto;
         padding: 0;
         width: 100%;
+        flex-direction: column;
         justify-content: flex-end;
     }
     .toolbar-items .item{
-        display: block;
-        position: relative;
-        margin: 10px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
     }
-
     .toolbar-items .item a{
         display: flex;
         overflow: hidden;
-        height: 40px;
-        line-height: 40px;
         margin-right: 0;
         padding: 0 20px;
         box-sizing: border-box;
