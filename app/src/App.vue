@@ -57,5 +57,6 @@ a:focus {
 }
 a:hover {
     background-color: #007acc;
+    color: #FFF;
 }
 </style>

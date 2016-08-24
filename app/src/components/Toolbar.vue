@@ -1,7 +1,7 @@
 <template>
     <div class="toolbar" v-show="visiable">
         <ul class="toolbar-items">
-            <li class="item" v-for="item in items"><a><img src="{{item.icon}}" class="icon" alt="{{item.name}}"></a></li>
+            <li class="item" v-bind:class="{ 'active': item.active }" v-for="item in items"><a><img src="{{item.icon}}" class="icon" alt="{{item.name}}"></a></li>
         </ul>
     </div>
 </template>
@@ -35,6 +35,16 @@
         flex-direction: column;
         align-items: center;
         padding: 20px 0;
+        cursor: pointer;
+        opacity: .6;
+    }
+    .toolbar-items .item:hover{
+        background: #252526;
+        opacity: 1;
+    }
+    .toolbar-items .item.active{
+        background: #252526;
+        opacity: 1;
     }
     .toolbar-items .item a{
         display: flex;
@@ -42,9 +52,6 @@
         margin-right: 0;
         padding: 0 20px;
         box-sizing: border-box;
-        background-position: 9px;
-        background-repeat: no-repeat;
-        opacity: .6;
         font-size: 15px;
         color: #fff;
         text-shadow: 0 1px 0 rgba(0,0,0,.8);

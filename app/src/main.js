@@ -6,7 +6,7 @@ import Util from "./util"
 global.Saber = Object.assign( Config , Util );
 
 /* eslint-disable no-new */
-new Vue({
+global.app = new Vue({
   el: 'body',
   components: { App }
 })
