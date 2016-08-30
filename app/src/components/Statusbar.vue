@@ -25,10 +25,7 @@
 <style>
     .statusbar{
         background: #007acc;
-        position: fixed;
-        bottom: 0;
         height: 22px;
-        width: 100%;
         color: #FFF;
         font-size: 14px;
         z-index: 25;

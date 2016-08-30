@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import Saber from "../Saber";
     export default {
         methods:{
             sendInfo(){
@@ -131,5 +132,8 @@
     }
     .global-message-list .info-left-side::selection {
         background: #007acc;
-    }    
+    }
+    .global-message-list a:hover {
+        background-color: #007acc;
+    }
 </style>

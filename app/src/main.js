@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import App from './App'
-import Config from "./config"
-import Util from "./util"
+import Saber from "./Saber"
 /* target,sources */
-global.Saber = Object.assign( Config , Util );
+global.Saber = Saber;
 
 /* eslint-disable no-new */
-global.app = new Vue({
+global.app =  new Vue({
   el: 'body',
   components: { App }
 })

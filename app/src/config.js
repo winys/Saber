@@ -1,21 +1,26 @@
 export default {
+    __PLUGINPATH : "/plugin/",
     statusbar:{
         visiable : true,
         statusMsg : "欢迎使用 Saber"
     },
-
     toolbar:{
         items: [
             {
-                name: "md5",
+                name: "foo",
                 icon : "",
+                plugin : "foo",
                 active: true
             },{
-                name: "md5",
-                icon : ""
+                name: "Bar",
+                icon : "",
+                plugin : "Bar",
+                active: false
             },{
                 name: "md5",
-                icon : ""
+                icon : "",
+                plugin : "md5",
+                active: false
             }
         ],
         visiable : true,

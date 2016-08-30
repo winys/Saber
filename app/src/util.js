@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 export default {
     sendMessage ( config, callback ){
         let msg = Saber.message;
@@ -35,5 +36,14 @@ export default {
     },
     _restart(code, text) {
         ipcRenderer.send('relaunch',{code,text})
-    }
+    },
+    guid (length){
+		'use strict';
+        length = length||32;
+		let ratio = Math.log(64) / Math.log(256);
+		let numbytes = Math.ceil(length * ratio);
+		let str = crypto.randomBytes(numbytes).toString('base64').slice(0, length);
+		return str.replace(/\+/g, '_').replace(/\//g, '-');
+	}
+
 }

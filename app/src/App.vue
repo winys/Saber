@@ -3,9 +3,7 @@
     <statusbar></statusbar>
     <div id="main">
     <toolbar></toolbar>
-    <workink>
-      <vue-router></vue-router>
-    </workink>
+    <workink></workink>
     </div>
     
   </div>
@@ -19,7 +17,7 @@ import workink from './components/Workink';
 import message from './components/Message';
 export default {
   components: {
-    statusbar,workink,toolbar,message
+    statusbar,toolbar,workink,message
   }
 }
 </script>
@@ -41,6 +39,7 @@ html,body{
   background: #ff8f00;
 }
 #app{
+  display: flex;
   background: #1e1e1e;
   width:100%;
   height:100%;
@@ -48,15 +47,19 @@ html,body{
   justify-content: space-around;
 }
 #main{
+  display:flex;
   flex:1;
   flex-direction: row;
-  justify-content: space-around;
+  align-items: stretch; 
 }
 a:focus {
     outline: none;
 }
-a:hover {
-    background-color: #007acc;
-    color: #FFF;
+::-webkit-scrollbar-thumb {
+    background: #6b6b6b;
+}
+::-webkit-scrollbar {
+    background: #1e1e1e;
+    width: 5px;
 }
 </style>

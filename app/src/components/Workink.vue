@@ -1,3 +1,58 @@
 <template>
-    <slot></slot>
+    <div class="workink">
+        <component id="{{currentView}}"
+            :is="currentView"
+            :curview="currentView"
+            keep-alive>
+        </component>
+    </div>
 </template>
+<script>
+    //在Vue初始化前没有Saber
+    import Saber from "../Saber"
+    let components = {};
+    for ( let key in  Saber.plugins ){
+        let plugin = Saber.plugins[key];
+        components[plugin.name]  =  function (resolve) {
+            require(['./PluginWrapper'], resolve)
+        };
+    }
+    global.PluginWrapper =  require('./PluginWrapper')
+    components["notfound"] = require("./Notfound");
+    
+    console.log(components);
+    export default {
+        data(){
+            return {
+                currentView : "notfound",
+                pages : []
+            }
+        },
+        components,
+        events: {
+            "changeTool" (name) {
+                this.$set("currentView", name)
+            },
+            "newTool" ( plugin ) {
+                if( plugin.name in this.pages ){
+                    //TODO: 新增Tab栏
+                    return;
+                }
+                //新建实例
+                this.pages.push( plugin.name );
+                this.currentView = plugin.name;
+
+            }
+        }
+    }
+</script>
+<style>
+    .workink{
+        flex:1;
+        color: #FFF;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: calc(100% - 50px);
+    }
+</style>

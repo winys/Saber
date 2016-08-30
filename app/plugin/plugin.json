@@ -1,0 +1,10 @@
+{
+    "foo" : {
+        "name" : "foo",
+        "version" : "1.0.0"
+    },
+    "Bar" : {
+        "name" : "Bar",
+        "version" : "1.0.0"
+    }
+}

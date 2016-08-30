@@ -53,7 +53,6 @@ app.on('activate', function () {
 
 ipc.on('relaunch',(info) => {
   //TODO: write relaunch log into logfile.
-  console.log(info.code + "::" + info.text)
   app.relaunch({args: process.argv.slice(1) + ['--relaunch']})
   app.exit(0)
 })

@@ -1,7 +1,9 @@
 <template>
     <div class="toolbar" v-show="visiable">
         <ul class="toolbar-items">
-            <li class="item" v-bind:class="{ 'active': item.active }" v-for="item in items"><a><img src="{{item.icon}}" class="icon" alt="{{item.name}}"></a></li>
+            <li class="item" v-for="item in items">
+                <a class="vlink" v-bind:class="{ 'active': item.active }" @click="changeTool($index)" name="{{item.plugin}}"><img v-bind:src="{{item.icon}}" class="icon" alt="{{item.name}}"></a>
+            </li>
         </ul>
     </div>
 </template>
@@ -10,6 +12,15 @@
     export default {
         data (){
             return Saber.toolbar;
+        },
+        methods : {
+            changeTool ( index ) {
+                this.items.forEach( (item,key) => {
+                    item.active = false;
+                });
+                this.items[index].active = true;
+                this.$parent.$broadcast('changeTool',this.items[index].name);
+            }
         }
     }
 </script>
@@ -17,11 +28,9 @@
 <style>
     .toolbar{
         background: #252526;
-        text-align: left;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
+        text-align: center;
+        width : 50px;
+        z-index: 3
     }
     .toolbar-items{
         margin: 0 auto;
@@ -34,15 +43,17 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+    .toolbar-items .item .vlink{        
         padding: 20px 0;
         cursor: pointer;
         opacity: .6;
     }
-    .toolbar-items .item:hover{
+    .toolbar-items .vlink:hover{
         background: #252526;
         opacity: 1;
     }
-    .toolbar-items .item.active{
+    .toolbar-items .vlink.active{
         background: #252526;
         opacity: 1;
     }
