@@ -1,5 +1,5 @@
 <template>
-    <div class="workink">
+    <div class="workink" daata-type="{{currentView}}">
         <component id="{{currentView}}"
             :is="currentView"
             :curview="currentView"
@@ -10,13 +10,16 @@
 <script>
     //在Vue初始化前没有Saber
     import Saber from "../Saber"
+    import PluginWrapper from './PluginWrapper'
     let components = {};
+    
     for ( let key in  Saber.plugins ){
         let plugin = Saber.plugins[key];
-        components[plugin.name]  =  function (resolve) {
-            require(['./PluginWrapper'], resolve)
+        components[plugin.name]  = function (resolve) {
+            resolve(Object.assign({},PluginWrapper))
         };
     }
+    console.log(components.foo === components.Bar)
     global.PluginWrapper =  require('./PluginWrapper')
     components["notfound"] = require("./Notfound");
     
@@ -25,23 +28,14 @@
         data(){
             return {
                 currentView : "notfound",
-                pages : []
             }
         },
         components,
         events: {
             "changeTool" (name) {
+                
+                console.log(this);
                 this.$set("currentView", name)
-            },
-            "newTool" ( plugin ) {
-                if( plugin.name in this.pages ){
-                    //TODO: 新增Tab栏
-                    return;
-                }
-                //新建实例
-                this.pages.push( plugin.name );
-                this.currentView = plugin.name;
-
             }
         }
     }

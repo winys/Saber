@@ -44,6 +44,10 @@ export default {
 		let numbytes = Math.ceil(length * ratio);
 		let str = crypto.randomBytes(numbytes).toString('base64').slice(0, length);
 		return str.replace(/\+/g, '_').replace(/\//g, '-');
-	}
+	},
+    isArray : Array.isArray,
+    isObject (obj) {
+        return toString.call(obj) === "[object Object]";
+    }
 
 }

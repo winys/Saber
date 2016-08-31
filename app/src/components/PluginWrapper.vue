@@ -129,7 +129,6 @@
         props: ['curview'],
         components,        
         ready(){
-            alert("ttt");
             this.curpage = this.pages[0].id;
             this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
                     item.classList.add("active");

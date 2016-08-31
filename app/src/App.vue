@@ -35,6 +35,11 @@ html,body{
   width: 100%;
   font-family: -apple-system,BlinkMacSystemFont,Segoe WPC,Segoe UI,HelveticaNeue-Light,Ubuntu,Droid Sans,sans-serif;
 }
+@media screen and (min-width: 1500px) {
+  body{
+    zoom: 1.25;
+  }
+}
 ::selection{
   background: #ff8f00;
 }
