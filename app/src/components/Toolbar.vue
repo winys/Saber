@@ -1,5 +1,5 @@
 <template>
-    <div class="toolbar" v-show="visiable">
+    <div class="toolbar" v-show="visiable|hasItem">
         <ul class="toolbar-items">
             <li class="item" v-for="item in items">
                 <a class="vlink" v-bind:class="{ 'active': item.active }" @click="changeTool($index)" name="{{item.plugin}}"><img v-bind:src="{{item.icon}}" class="icon" alt="{{item.name}}"></a>
@@ -11,6 +11,7 @@
 <script>
     export default {
         data (){
+            Saber.toolbar.items = Saber.store("__toolbar");       
             return Saber.toolbar;
         },
         methods : {
@@ -20,6 +21,13 @@
                 });
                 this.items[index].active = true;
                 this.$parent.$broadcast('changeTool',this.items[index].name);
+            }
+        },
+        filters:{
+            hasItem(){
+                return ( Saber.isEmpty(this.items) )
+                    ? (this.visiable=false)
+                    : this.visiable;
             }
         }
     }

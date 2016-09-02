@@ -21,11 +21,10 @@
     let components = {};
     for ( let key in  Saber.plugins ){
         let plugin = Saber.plugins[key];
-        components[plugin.name]  =  function (resolve) {
-            require(['../../plugin/'+plugin.name], resolve)
+        components[plugin.name]  =  (resolve) => {
+            require(['../../plugin/'+plugin.name], resolve);
         };
     }
-    components["notfound"] = require("./Notfound");
     export default {
         data () {
           return {
@@ -164,7 +163,6 @@
                     });
                 }
                 window.event.stopPropagation();
-                
             },
             scroll(){
                 let event = window.event;
@@ -178,6 +176,12 @@
                 target.style.marginLeft = pos +"px";
                 
                 event.stopPropagation();
+            }
+        },
+        events:{
+            "storage" : (id, data) => {
+                if(Saber.isEmpty(id))
+                    Saber.store(id.toString(),JSON.stringify(data));
             }
         }
     }

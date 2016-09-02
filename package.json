@@ -13,6 +13,7 @@
     "gulp-util": "^3.0.7"
   },
   "scripts": {
+    "dev": "node app/build/dev-server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

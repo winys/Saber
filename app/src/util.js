@@ -48,6 +48,58 @@ export default {
     isArray : Array.isArray,
     isObject (obj) {
         return toString.call(obj) === "[object Object]";
+    },
+    isEmpty : function(obj){
+		var type = toString.call(obj);	
+		switch (type) {
+			case '[object Object]' :
+				for( var key in obj ){
+					return false;
+				}
+				return true;
+			case '[object Array]' :
+				return obj.length === 0;
+			case '[object String]' :
+				return obj.length === 0;
+			case '[object Null]' :
+				return true;
+			case '[object Undefined]' :
+				return true;
+			case '[object Boolean]' :
+				return !obj;
+			default :
+				return false;
+		}
+	},
+    store(id,data){
+        let storage = window.localStorage;        
+        if(id === undefined){
+            return null;
+        }
+        if(id === null){
+            return storage.clear();
+        }
+        if(this.isEmpty(data))
+            return JSON.parse(storage.getItem(id.toString())) || {};
+
+        return storage.setItem(id.toString(), JSON.stringify(data));  
+    },
+    _existFile(path){
+        let fstat;
+        try {
+            fstat = fs.statSync(path);
+        }catch(e){
+            return null;
+        }
+        return fstat;
+    },
+    hasPlugin( path ){
+        console.log(path)
+        //TODO:后期修改
+        let fstat = Saber._existFile(path);
+        return fstat && fstat.isDirectory()
+            ? Saber._existFile(path+"/Saber.json") !== null
+            : Saber._existFile(path + ".vue") !== null
     }
 
 }

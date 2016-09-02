@@ -1,5 +1,5 @@
 <template>
-    <div class="workink" daata-type="{{currentView}}">
+    <div class="workink" daata-type="{{currentView}}" v-show="visiable|hasItem">
         <component id="{{currentView}}"
             :is="currentView"
             :curview="currentView"
@@ -19,23 +19,34 @@
             resolve(Object.assign({},PluginWrapper))
         };
     }
-    console.log(components.foo === components.Bar)
-    global.PluginWrapper =  require('./PluginWrapper')
-    components["notfound"] = require("./Notfound");
-    
-    console.log(components);
+    components["notfound"] = (resolve) => {
+        require(["./Notfound"], resolve);
+    };
+
     export default {
         data(){
             return {
-                currentView : "notfound",
+                currentView : "",
+                visiable : true
             }
         },
         components,
         events: {
             "changeTool" (name) {
-                
-                console.log(this);
-                this.$set("currentView", name)
+                if(name in Saber.plugins){
+                    this.$set("currentView", name);
+                }
+                else{
+                     this.$set("currentView", "notfound");
+                }
+                this.$set("visiable", true);
+            }
+        },
+        filters:{
+            hasItem(){
+                return ( Saber.isEmpty(this.currentView) )
+                    ? (this.visiable=false)
+                    : this.visiable;
             }
         }
     }
