@@ -11,7 +11,13 @@
 <script>
     export default {
         data (){
-            Saber.toolbar.items = Saber.store("__toolbar");       
+            let items = Saber.toolbar.items = Saber.store("__toolbar");
+            for( let item of items ){
+                if(item.active){
+                    Saber.workink.currentView = item.name;
+                    break;
+                }
+            }
             return Saber.toolbar;
         },
         methods : {

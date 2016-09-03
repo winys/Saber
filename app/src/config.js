@@ -10,7 +10,8 @@ export default {
     },
 
     workink:{
-
+        currentView:"",
+        visiable:true
     },
 
     message: {

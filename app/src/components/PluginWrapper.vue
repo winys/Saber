@@ -10,6 +10,7 @@
             <div v-for="page in pages" class="tabpage" data-tabid={{page.id}}>
             <component 
                 :is="curview"
+                :id="page.id"
                 keep-alive>
             </component>
             </div>
@@ -25,105 +26,17 @@
             require(['../../plugin/'+plugin.name], resolve);
         };
     }
+    
+    components["notfound"] = (resolve) => {
+        require(["./Notfound"], resolve);
+    };
     export default {
         data () {
-          return {
-              pages:[
-                {
-                    title:"page1",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page2",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page3",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page4",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page5",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page6",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page6",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page8",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page9",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page10",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page11",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page12",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page13",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page14",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page15",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page16",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page17",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page18",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page19",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page16",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page17",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page18",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page19",
-                    id:Saber.guid()
-                }
-            ],
-            curpage:''
-          }
+            let pageinfo = Saber.store("__pageinfo");
+            if(Saber.isEmpty(pageinfo)){
+                pageinfo = {pages:[{title:"default",id:Saber.guid()}],curpage:""};
+            }
+            return pageinfo;
         },
         props: ['curview'],
         components,        

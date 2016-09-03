@@ -25,10 +25,8 @@
 
     export default {
         data(){
-            return {
-                currentView : "",
-                visiable : true
-            }
+
+            return Saber.workink;
         },
         components,
         events: {
