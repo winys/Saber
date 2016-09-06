@@ -27,12 +27,38 @@
             return Saber.toolbar;
         },
         methods : {
-            changeTool ( index ) {
-                this.items.forEach( (item,key) => {
+            changeTool ( index, callback ) {
+                for (let item of this.items){
                     item.active = false;
-                });
+                }
                 this.items[index].active = true;
                 this.$parent.$broadcast('changeTool',this.items[index].name);
+                this.$nextTick(function (){
+                    callback && callback.call(this);
+                })
+            }
+        },
+        events: {
+            "newtool" : function (toolid) {
+                let temp = this.items;
+                let has = -1;
+                for (let index in temp){
+                    if(temp[index].name === toolid)
+                        has =index;
+                }
+                if( has < 0 ){
+                    temp.push( Saber.plugins[toolid] );
+                    this.visiable = true;
+                    this.changeTool(temp.length-1,function(){                        
+                        this.$parent.$broadcast('newpage',toolid);
+                    });
+                    Saber.store("__toolbar", Saber.toolbar.items);
+                }
+                else{
+                    this.changeTool(has,function(){                        
+                        this.$parent.$broadcast('newpage_' + toolid ,toolid);
+                    });
+                }
             }
         },
         filters:{

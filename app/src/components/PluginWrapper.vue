@@ -32,23 +32,41 @@
     };
     export default {
         data () {
-            let pageinfo = Saber.store("__pageinfo");
+            this.name = this.curview;
+            let pageinfo = Saber.store("__pageinfo_"+this.curview);
             if(Saber.isEmpty(pageinfo)){
-                pageinfo = {pages:[{title:"default",id:Saber.guid()}],curpage:""};
+                pageinfo = {pages:[],curpage:""};
             }
             return pageinfo;
         },
         props: ['curview'],
         components,        
         ready(){
+            if(Saber.isEmpty(this.pages))
+                this.newPage();
             this.curpage = this.pages[0].id;
             this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
                     item.classList.add("active");
                 });
+
+            this.$on(`newpage_${this.name}`,  function(name){
+                this.newPage();
+            });
         },
         methods:{
+            newPage () {
+                let id = Saber.guid();                
+                this.pages.push({title:"page"+(this.pages.length+1),id})
+                this.$nextTick (function(){
+                    this.changeItem(id);
+                    Saber.store("__pageinfo_"+this.name, this.$data);
+                });
+            },
             changeItem ( pageId ){
-                if (pageId === this.curpage) return;
+                if (pageId === this.curpage) {
+                    this.resetPage();
+                    return;
+                }
                 this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
                     item.classList.remove("active");
                 });
@@ -67,12 +85,14 @@
                     this.pages.splice( index , 1);
                     this.$nextTick(function(){                        
                         this.changeItem(this.pages[index%this.pages.length].id);
+                        Saber.store("__pageinfo_"+this.name, this.$data);
                     });
                 }
                 else{
                     this.pages.splice( index , 1);
                     this.$nextTick(function(){                        
                         this.resetPage();
+                        Saber.store("__pageinfo_"+this.name, this.$data);
                     });
                 }
                 window.event.stopPropagation();

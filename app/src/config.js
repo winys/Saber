@@ -18,7 +18,7 @@ export default {
         items :[],
         visiable : true
     },
-
+    
     contextmenu: {
 
     }
