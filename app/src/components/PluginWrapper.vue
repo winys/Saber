@@ -11,6 +11,7 @@
             <div v-for="page in pages" class="tabpage" data-tabid={{page.id}}>
             <component 
                 :is="curview"
+                :id="page.id"
                 keep-alive>
             </component>
             </div>
@@ -22,123 +23,52 @@
     let components = {};
     for ( let key in  Saber.plugins ){
         let plugin = Saber.plugins[key];
-        components[plugin.name]  =  function (resolve) {
-            require(['../../plugin/'+plugin.name], resolve)
+        components[plugin.name]  =  (resolve) => {
+            require(['../../plugin/'+plugin.name], resolve);
         };
     }
-    components["notfound"] = require("./Notfound");
+    
+    components["notfound"] = (resolve) => {
+        require(["./Notfound"], resolve);
+    };
     export default {
         data () {
-          return {
-              pages:[
-                {
-                    title:"page1",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page2",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page3",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page4",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page5",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page6",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page7",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page8",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page9",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page10",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page11",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page12",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page13",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page14",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page15",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page16",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page17",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page18",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page19",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page20",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page21",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page22",
-                    id:Saber.guid()
-                },
-                {
-                    title:"page23",
-                    id:Saber.guid()
-                }
-            ],
-            curpage:'',
-          }
+            this.name = this.curview;
+            let pageinfo = Saber.store("__pageinfo_"+this.curview);
+            if(Saber.isEmpty(pageinfo)){
+                pageinfo = {pages:[],curpage:""};
+            }
+            return pageinfo;
         },
         props: ['curview'],
         components,        
         ready(){
+            if(Saber.isEmpty(this.pages))
+                this.newPage();
             this.curpage = this.pages[0].id;
             this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
                     item.classList.add("active");
                 });
+
+            this.$on(`newpage_${this.name}`,  function(name){
+                this.newPage();
+            });
         },
         methods:{
+            newPage () {
+                let id = Saber.guid();                
+                this.pages.push({title:"page"+(this.pages.length+1),id})
+                this.$nextTick (function(){
+                    this.changeItem(id);
+                    Saber.store("__pageinfo_"+this.name, this.$data);
+                });
+            },
             //切换标签页
             changeItem ( pageId ){
-                if (pageId === this.curpage) return;
+                if (pageId === this.curpage) {
+                    this.resetPage();
+                    return;
+                }
                 this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
                     item.classList.remove("active");
                 });
@@ -155,20 +85,23 @@
             },
             //
             closeTab(index){
-                if(this.pages[index] && this.curpage === this.pages[index].id){                                        
+                let pageid = this.pages[index].id;
+                if(this.pages[index] && this.curpage === pageid){                              
                     this.pages.splice( index , 1);
                     this.$nextTick(function(){                        
                         this.changeItem(this.pages[index%this.pages.length].id);
+                        Saber.store("__pageinfo_"+this.name, this.$data);
                     });
                 }
                 else{
                     this.pages.splice( index , 1);
                     this.$nextTick(function(){                        
                         this.resetPage();
+                        Saber.store("__pageinfo_"+this.name, this.$data);
                     });
                 }
+                Saber.store(pageid,null);
                 window.event.stopPropagation();
-                
             },
             //滚动
             scroll(){                
@@ -247,6 +180,12 @@
             allowDrop(){
                 let event = window.event;
                 event.preventDefault();
+            }
+        },
+        events:{
+            "storage" : (id, data) => {
+                if(Saber.isEmpty(id))
+                    Saber.store(id.toString(),JSON.stringify(data));
             }
         }
     }

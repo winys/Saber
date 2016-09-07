@@ -1,5 +1,5 @@
 <template>
-    <div class="toolbar" v-show="visiable">
+    <div class="toolbar" v-show="visiable|hasItem">
         <ul class="toolbar-items">
             <li class="item" v-for="item in items">
                 <a class="vlink" v-bind:class="{ 'active': item.active }" @click="changeTool($index)" name="{{item.plugin}}"><img v-bind:src="{{item.icon}}" class="icon" alt="{{item.name}}"></a>
@@ -11,15 +11,61 @@
 <script>
     export default {
         data (){
+            let items = Saber.store("__toolbar");
+            if( Saber.isEmpty(items) ){                
+                items = [];
+            }
+            else{
+                Saber.toolbar.items = items;
+            }
+            for( let item of items ){
+                if(item.active){
+                    Saber.workink.currentView = item.name;
+                    break;
+                }
+            }
             return Saber.toolbar;
         },
         methods : {
-            changeTool ( index ) {
-                this.items.forEach( (item,key) => {
+            changeTool ( index, callback ) {
+                for (let item of this.items){
                     item.active = false;
-                });
+                }
                 this.items[index].active = true;
                 this.$parent.$broadcast('changeTool',this.items[index].name);
+                this.$nextTick(function (){
+                    callback && callback.call(this);
+                })
+            }
+        },
+        events: {
+            "newtool" : function (toolid) {
+                let temp = this.items;
+                let has = -1;
+                for (let index in temp){
+                    if(temp[index].name === toolid)
+                        has =index;
+                }
+                if( has < 0 ){
+                    temp.push( Saber.plugins[toolid] );
+                    this.visiable = true;
+                    this.changeTool(temp.length-1,function(){                        
+                        this.$parent.$broadcast('newpage',toolid);
+                    });
+                    Saber.store("__toolbar", Saber.toolbar.items);
+                }
+                else{
+                    this.changeTool(has,function(){                        
+                        this.$parent.$broadcast('newpage_' + toolid ,toolid);
+                    });
+                }
+            }
+        },
+        filters:{
+            hasItem(){
+                return ( Saber.isEmpty(this.items) )
+                    ? (this.visiable=false)
+                    : this.visiable;
             }
         }
     }

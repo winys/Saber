@@ -1,20 +1,22 @@
 <template>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
+    <div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
 
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div>
-    <div class="foo">dasdsads</div><div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div><div class="foo">dasdsads</div>
 
-    <div class="foo">dasdsads</div>
+        <div class="foo">dasdsads</div>
+    </div>
 </template>
 <style>
     .foo{

@@ -2,6 +2,7 @@
   <div id="app">
     <statusbar></statusbar>
     <div id="main">
+    <toolmanager></toolmanager>
     <toolbar></toolbar>
     <workink></workink>
     </div>
@@ -12,17 +13,18 @@
 <script>
 import statusbar from './components/Statusbar';
 import toolbar from './components/Toolbar';
+import toolmanager from './components/ToolManager';
 import workink from './components/Workink';
 import message from './components/Message';
 export default {
   components: {
-    statusbar,toolbar,workink,message
+    statusbar,toolbar,workink,message,toolmanager
   }
 }
 </script>
 
 <style>
-div,section,ul,p{
+div,section,ul,p,input{
   box-sizing:border-box;
   margin: 0;
   padding: 0;
@@ -33,6 +35,11 @@ html,body{
   height: 100%;
   width: 100%;
   font-family: -apple-system,BlinkMacSystemFont,Segoe WPC,Segoe UI,HelveticaNeue-Light,Ubuntu,Droid Sans,sans-serif;
+}
+@media screen and (min-width: 1500px) {
+  body{
+    zoom: 1.25;
+  }
 }
 ::selection{
   background: #ff8f00;
@@ -60,5 +67,8 @@ a:focus {
 ::-webkit-scrollbar {
     background: #1e1e1e;
     width: 5px;
+}
+input:focus{
+    outline-color: #007acc;
 }
 </style>

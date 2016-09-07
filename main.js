@@ -11,13 +11,19 @@ let mainWindow
 
 function createWindow () {
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({width: 800, height: 600, backgroundColor:"#1e1e1e"})
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/app/index.html`)
 
+  //init the menu
+  const {Menu} = require('electron')
+  const menuArr = require('./config/Menu.js');
+  const menu = Menu.buildFromTemplate(menuArr)
+  Menu.setApplicationMenu(menu)
+
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  //mainWindow.webContents.openDevTools()
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
