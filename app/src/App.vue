@@ -5,9 +5,8 @@
     <toolbar></toolbar>
     <workink></workink>
     </div>
-    
+    <message></message>
   </div>
-  <message></message>
 </template>
 
 <script>

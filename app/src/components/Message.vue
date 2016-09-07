@@ -5,7 +5,7 @@
                 <div class="message-action" >
                     <a class="restart" v-if="item.restart" tabindex="0" role="button" @click="restart">
                         立即重启
-                    </a><a class="action-button" tabindex="0" role="button" @click="close">
+                    </a><a class="action-button" tabindex="0" role="button" @click="close($index)">
                         关闭
                     </a>
                  </div><div class="message-left-side">
@@ -15,11 +15,6 @@
             </li>
         </ul>
     </div>
-    <div>
-        <button @click="sendInfo">信息</button><br/>
-        <button @click="sendWarn">警告</button><br/>
-        <button @click="sendErro">错误</button><br/>
-    </div>   
 </template>
 
 <script>
@@ -47,9 +42,9 @@
                     restart: false
                 });
             },
-            close(){
+            close(index){
                 Saber.closeMessage({
-                    num: this.index
+                    num: index
                 });
             },
             restart(){

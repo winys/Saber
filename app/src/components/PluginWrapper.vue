@@ -1,8 +1,9 @@
 <template>
     <div class="PluginWrapper">
-        <div class="tablist" @mousewheel="scroll()">
-            <div class="tab-item" v-for="page in pages" title="{{page.title}}" data-tabid={{page.id}} @click="changeItem(page.id)">
-                <div class="tab-label">{{page.title}}</div>
+        <div class="tablist" @mousewheel="scroll()" @dragover="allowDrop()" @drop="drop()">
+            <div class="tab-item" data-index={{$index}} v-for="page in pages" title="{{page.title}}" draggable="true" data-tabid={{page.id}} 
+            @click="changeItem(page.id)" @contextmenu="contextmenu($index)" @dragstart="drag($index)">
+                <div class="tab-label" >{{page.title}}</div>
                 <div class="action-label" @click="closeTab($index)">x</div>
             </div>
         </div>
@@ -55,7 +56,7 @@
                     id:Saber.guid()
                 },
                 {
-                    title:"page6",
+                    title:"page7",
                     id:Saber.guid()
                 },
                 {
@@ -107,35 +108,35 @@
                     id:Saber.guid()
                 },
                 {
-                    title:"page16",
+                    title:"page20",
                     id:Saber.guid()
                 },
                 {
-                    title:"page17",
+                    title:"page21",
                     id:Saber.guid()
                 },
                 {
-                    title:"page18",
+                    title:"page22",
                     id:Saber.guid()
                 },
                 {
-                    title:"page19",
+                    title:"page23",
                     id:Saber.guid()
                 }
             ],
-            curpage:''
+            curpage:'',
           }
         },
         props: ['curview'],
         components,        
         ready(){
-            alert("ttt");
             this.curpage = this.pages[0].id;
             this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
                     item.classList.add("active");
                 });
         },
         methods:{
+            //切换标签页
             changeItem ( pageId ){
                 if (pageId === this.curpage) return;
                 this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
@@ -146,11 +147,13 @@
                 });
                 this.curpage = pageId;
             },
+            //
             resetPage (){
                 this.$el.querySelectorAll("[data-tabid='"+this.curpage+"']").forEach(function(item){
                     item.classList.add("active");
                 });
             },
+            //
             closeTab(index){
                 if(this.pages[index] && this.curpage === this.pages[index].id){                                        
                     this.pages.splice( index , 1);
@@ -167,7 +170,8 @@
                 window.event.stopPropagation();
                 
             },
-            scroll(){
+            //滚动
+            scroll(){                
                 let event = window.event;
                 let target = this.$el.getElementsByClassName("tablist")[0];
                 let pos = parseInt(target.style.marginLeft||0) + event.wheelDelta;
@@ -177,8 +181,72 @@
                     Math.abs(pos)>target.offsetWidth+target.offsetLeft
                 )return;
                 target.style.marginLeft = pos +"px";
-                
                 event.stopPropagation();
+            },
+            //右键菜单
+            contextmenu( index ){
+                const menu = new Menu();
+                let event = window.event;
+                let self = this;
+                menu.append(new MenuItem({label: '关闭', click() { self.closeTab(index) }}));
+                menu.append(new MenuItem({label: '关闭右侧', click(){
+                    self.pages.splice(index+1);
+                    self.$nextTick(() => {                        
+                        self.changeItem(self.pages[index%self.pages.length].id);
+                    });
+                }}));
+                menu.append(new MenuItem({label: '关闭左侧',  click(){
+                    let pageid = self.pages[index%self.pages.length].id;
+                    self.pages.splice(0,index);
+                    self.$nextTick(() => {                        
+                        self.changeItem(pageid);
+                    });
+                }}));
+                menu.append(new MenuItem({label: '关闭其它',  click(){
+                    self.pages=[self.pages[index]];
+                    self.$nextTick(() => {                        
+                        self.changeItem(self.pages[0].id);
+                    });
+                }}));
+                event.preventDefault();
+                menu.popup(remote.getCurrentWindow());
+                //阻止冒泡
+                event.stopPropagation();
+            },
+            //开始拖动
+            drag( index ){
+                //start
+                let event = window.event;
+                let tablis = document.getElementsByClassName('tab-item');
+                let tab = tablis[index];
+                let self = this;
+                self.changeItem(self.pages[index%self.pages.length].id)
+                event.dataTransfer.setData("Text",index);
+            },
+            //拖动
+            drop(){
+                let event = window.event;
+                let index = event.dataTransfer.getData("Text");
+                let tagindex = index;
+                let ele = event.target.closest(".tab-item");
+                //获取鼠标位置
+                let pos = event.clientX - ele.getBoundingClientRect().left;
+                //获取拖动位置的index
+                let ele_index = parseInt(ele.getAttribute("data-index"));
+                let ele_width = ele.offsetWidth;
+                pos > ele_width/2?tagindex = ele_index+1:tagindex = ele_index;
+                //拖动的页面
+                let pagedrag = this.pages[index];
+                if(index == tagindex)return;
+                if(index < tagindex)tagindex -= 1;
+                this.pages.splice(index,1);
+                this.pages.splice(tagindex,0,pagedrag);
+                event.preventDefault();
+            },
+            //放下
+            allowDrop(){
+                let event = window.event;
+                event.preventDefault();
             }
         }
     }

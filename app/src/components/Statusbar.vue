@@ -1,7 +1,7 @@
 <template>
     <div class="statusbar" v-if="visiable">
         <span class="status-item left"> {{statusMsg}}</span>        
-        <span class="status-item right">V0.0.1</span>
+        <span class="status-item right" @click="change">V0.0.1</span>
         <span class="status-item right">UTF-8</span>
     </div>
 </template>

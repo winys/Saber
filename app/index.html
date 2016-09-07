@@ -7,7 +7,8 @@
   <body>
     <app></app>    
     <script>
-      const {ipcRenderer} = require('electron')
+      const {ipcRenderer,remote} = require('electron')
+      const {Menu, MenuItem} = remote
     </script>
     <script type="text/javascript" src="http://localhost:8080/app.js"></script>
     <!-- built files will be auto injected -->
