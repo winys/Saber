@@ -3,10 +3,25 @@ module.exports =  [
         label: '文件',
         submenu: [
             {
-                label: '新建',
+                label: '新建工具',
                 click (item, focusedWindow){
                     focusedWindow.send("newtool");
                 }
+            },
+             {
+                label: '工具列表',
+                click (item, focusedWindow){
+                    focusedWindow.send("toollist");
+                }
+            },
+             {
+                label: '添加工具',
+                click (item, focusedWindow){
+                    focusedWindow.send("installtool");
+                }
+            },
+            {
+                type:"separator"
             },
             {
                 label: "退出",

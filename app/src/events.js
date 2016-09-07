@@ -1,11 +1,30 @@
 ipcRenderer.on("newtool",function(){
-    //alert("newtool");
-    //弹出选择框
     if(global.App === undefined){
         alert("未发现应用");
         return;
     }
-    App.$broadcast("newtool","foo");
+    App.$broadcast("ToolList",{
+        title:"请选择工具"
+    });
+})
+
+ipcRenderer.on("toollist",function(){
+    if(global.App === undefined){
+        alert("未发现应用");
+        return;
+    }
+    App.$broadcast("ToolList",{
+        title:"工具管理"
+    });
+})
+ipcRenderer.on("installtool",function(){
+    if(global.App === undefined){
+        alert("未发现应用");
+        return;
+    }
+    App.$broadcast("InstallTool",{
+        title:"安装工具"
+    });
 })
 ipcRenderer.on("zoomin",function(){
     let size = parseInt(document.body.style.zoom,10)||100;

@@ -81,7 +81,8 @@
                 });
             },
             closeTab(index){
-                if(this.pages[index] && this.curpage === this.pages[index].id){                                        
+                let pageid = this.pages[index].id;
+                if(this.pages[index] && this.curpage === pageid){                              
                     this.pages.splice( index , 1);
                     this.$nextTick(function(){                        
                         this.changeItem(this.pages[index%this.pages.length].id);
@@ -95,6 +96,7 @@
                         Saber.store("__pageinfo_"+this.name, this.$data);
                     });
                 }
+                Saber.store(pageid,null);
                 window.event.stopPropagation();
             },
             scroll(){

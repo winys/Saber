@@ -14,12 +14,7 @@
                  </div>
             </li>
         </ul>
-    </div>
-    <div>
-        <button @click="sendInfo">信息</button><br/>
-        <button @click="sendWarn">警告</button><br/>
-        <button @click="sendErro">错误</button><br/>
-    </div>   
+    </div> 
 </template>
 
 <script>

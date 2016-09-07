@@ -79,6 +79,9 @@ export default {
         if(id === null){
             return storage.clear();
         }
+        if(data === null){
+            return storage.removeItem(id);
+        }
         if(this.isEmpty(data))
             return JSON.parse(storage.getItem(id.toString())) || {};
 
@@ -100,6 +103,15 @@ export default {
         return fstat && fstat.isDirectory()
             ? Saber._existFile(path+"/Saber.json") !== null
             : Saber._existFile(path + ".vue") !== null
+    },
+    _dictSort( obj ){
+        let obj2  = {},
+            keys = Object.keys(obj).sort();
+        for (var i = 0, n = keys.length, key; i < n; ++i) {
+            key = keys[i];
+            obj2[key] = obj[key];
+        }
+        return obj2;
     }
 
 }

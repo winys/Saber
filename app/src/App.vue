@@ -2,10 +2,10 @@
   <div id="app">
     <statusbar></statusbar>
     <div id="main">
+    <toolmanager></toolmanager>
     <toolbar></toolbar>
     <workink></workink>
     </div>
-    
   </div>
   <message></message>
 </template>
@@ -13,17 +13,18 @@
 <script>
 import statusbar from './components/Statusbar';
 import toolbar from './components/Toolbar';
+import toolmanager from './components/ToolManager';
 import workink from './components/Workink';
 import message from './components/Message';
 export default {
   components: {
-    statusbar,toolbar,workink,message
+    statusbar,toolbar,workink,message,toolmanager
   }
 }
 </script>
 
 <style>
-div,section,ul,p{
+div,section,ul,p,input{
   box-sizing:border-box;
   margin: 0;
   padding: 0;
@@ -66,5 +67,8 @@ a:focus {
 ::-webkit-scrollbar {
     background: #1e1e1e;
     width: 5px;
+}
+input:focus{
+    outline-color: #007acc;
 }
 </style>
