@@ -1,6 +1,5 @@
 <template>
-    <div><input type="text" v-model="msg" @blur="cache">{{msg}}</div>
-    
+    <div><input type="text" v-model="msg" @blur="cache">{{msg}}</div>    
 </template>
 <script>
     export default {

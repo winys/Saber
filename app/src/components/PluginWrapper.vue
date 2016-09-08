@@ -162,16 +162,16 @@
                 let index = event.dataTransfer.getData("Text");
                 let tagindex = index;
                 let ele = event.target.closest(".tab-item");
-                //获取鼠标位置
-                let pos = event.clientX - ele.getBoundingClientRect().left;
+                
                 //获取拖动位置的index
-                let ele_index = parseInt(ele.getAttribute("data-index"));
-                let ele_width = ele.offsetWidth;
-                pos > ele_width/2?tagindex = ele_index+1:tagindex = ele_index;
-                //拖动的页面
-                let pagedrag = this.pages[index];
+                if(Saber.isEmpty(ele))
+                    tagindex= this.pages.length-1;
+                else
+                    tagindex = parseInt(ele.getAttribute("data-index"));
+                
+                //调换页面                
                 if(index == tagindex)return;
-                if(index < tagindex)tagindex -= 1;
+                let pagedrag = this.pages[index];
                 this.pages.splice(index,1);
                 this.pages.splice(tagindex,0,pagedrag);
                 event.preventDefault();
