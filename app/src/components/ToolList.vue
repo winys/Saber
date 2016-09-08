@@ -26,6 +26,12 @@
                 toolinfo.items[ group ].push(plugin);
             }
             return toolinfo;
+        },
+        methods: {
+            createTool(name){
+                this.$root.$broadcast("newtool",name);
+                this.$dispatch("close");
+            }
         }
     }
 </script>

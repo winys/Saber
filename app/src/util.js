@@ -1,5 +1,6 @@
 import crypto from 'crypto'
 export default {
+    //发送通知
     sendMessage ( config, callback ){
         let msg = Saber.message;
         var bkcolor = "#007acc";
@@ -22,6 +23,7 @@ export default {
         
         msg.visiable = true;
     },
+    //关闭通知
     closeMessage(config,callback){
         let msg = Saber.message;
         var i;
@@ -30,13 +32,16 @@ export default {
             1
         );
     },
+    //底部消息
     statusMsg( config, callback) {
         Saber.statusbar.statusMsg = config.statusMsg;
         callback && callback.call(saber,saber.statusbar);
     },
+    //重启
     _restart(code, text) {
         ipcRenderer.send('relaunch',{code,text})
     },
+    //唯一id
     guid (length){
 		'use strict';
         length = length||32;
@@ -48,6 +53,7 @@ export default {
     isArray : Array.isArray,
     isObject (obj) {
         return toString.call(obj) === "[object Object]";
+
     },
     isEmpty : function(obj){
 		var type = toString.call(obj);	
@@ -113,5 +119,4 @@ export default {
         }
         return obj2;
     }
-
 }

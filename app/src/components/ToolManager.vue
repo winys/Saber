@@ -40,6 +40,9 @@
                 this.$set("title",opt.title);
                 this.$set("visiable",true);
                 this.$set("currentView","installtool");
+            },
+            "close"(){
+                this.$set("visiable", false);
             }
         }
     }

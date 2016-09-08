@@ -7,12 +7,11 @@
   <body>
     <app></app>    
     <script>
-      //和nodejs的jiekou
-      const {ipcRenderer,dialog} = require('electron');
+      const {ipcRenderer,remote} = require('electron')
+      const {Menu, MenuItem} = remote
       const fs = require('fs');
       const path = require('path');
       const APP_PATH= process.cwd();
-      const Menu = require('electron').remote.Menu;
     </script>
     <script type="text/javascript" src="http://localhost:8080/app.js"></script>
     <!-- built files will be auto injected -->
