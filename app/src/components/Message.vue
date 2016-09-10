@@ -20,32 +20,9 @@
 <script>
     import Saber from "../Saber";
     export default {
-        methods:{
-            sendInfo(){
-                Saber.sendMessage({
-                    type: "信息",
-                    text: "You are SaBer.",
-                    restart: true
-                });
-            },
-            sendWarn(){
-                Saber.sendMessage({
-                    type: "警告",
-                    text: "Repeat.You are SaBer.",
-                    restart: false
-                });
-            },
-            sendErro(){
-                Saber.sendMessage({
-                    type: "错误",
-                    text: "Damn.You are SaBer.Bitch!",
-                    restart: false
-                });
-            },
+        methods:{            
             close(index){
-                Saber.closeMessage({
-                    num: index
-                });
+                this.items.splice(index,1);
             },
             restart(){
                 Saber._restart(0, "老子不玩了");

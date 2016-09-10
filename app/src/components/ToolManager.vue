@@ -1,8 +1,8 @@
 <template>
     <div class="toolManager" :class={active:visiable}>
         <div class="header">             
-            <a class="header_op" @click="close">x</a>
-            <span class="header_text">{{title}}</span>
+            <a class="header_op" @click="close"><i class="fa fa-times" aria-hidden="true"></i></a>
+            <span class="header_text"><i class="fa fa-wrench" aria-hidden="true"></i> {{title}}</span>
         </div>
         <component id="{{currentView}}"
             :is="currentView">
@@ -51,12 +51,12 @@
     .toolManager{
         width:0px;
         overflow:hidden;
-        color:#FFF;
+        color: #ccc;
         transition:width ease-in-out 0.5s, background ease-in-out 0.5s;
     }
     .toolManager.active{
         width: 250px;
-        background: #373738;
+        background: #252526;
     }
     .toolManager .header{
         background: #3e3e3e;
@@ -72,6 +72,7 @@
         padding: 0 5px;
         overflow: hidden;
         text-overflow: ellipsis;
+        word-spacing: 5px;
     }
     .toolManager .header_op{
         cursor: pointer;

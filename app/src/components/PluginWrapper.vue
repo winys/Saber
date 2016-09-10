@@ -4,7 +4,7 @@
             <div class="tab-item" data-index={{$index}} v-for="page in pages" title="{{page.title}}" draggable="true" data-tabid={{page.id}} 
             @click="changeItem(page.id)" @contextmenu="contextmenu($index)" @dragstart="drag($index)">
                 <div class="tab-label" >{{page.title}}</div>
-                <div class="action-label" @click="closeTab($index)">x</div>
+                <div class="action-label" @click="closeTab($index)"><i class="fa fa-times" aria-hidden="true"></i></div>
             </div>
         </div>
         <div class="pluginink">
@@ -205,7 +205,6 @@
     flex-wrap: nowrap;
     overflow: auto;
     background : #252526;
-    -webkit-user-select : none;
     position: relative;
     margin-left:0;
 }
@@ -286,5 +285,6 @@
 }
 .PluginWrapper .tabpage.active{
     display:block;
+    -webkit-user-select: text;
 }
 </style>

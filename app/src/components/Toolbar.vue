@@ -73,10 +73,10 @@
 
 <style>
     .toolbar{
-        background: #252526;
+        background: #333;
         text-align: center;
         width : 50px;
-        z-index: 3
+        z-index: 3;
     }
     .toolbar-items{
         margin: 0 auto;
@@ -96,11 +96,11 @@
         opacity: .6;
     }
     .toolbar-items .vlink:hover{
-        background: #252526;
+        background: #333;
         opacity: 1;
     }
     .toolbar-items .vlink.active{
-        background: #252526;
+        background: #333;
         opacity: 1;
     }
     .toolbar-items .item a{
@@ -116,5 +116,6 @@
     .toolbar-items .item .icon{
         width: 25px;
         height : 25px;
+        -webkit-user-select: none;
     }
 </style>

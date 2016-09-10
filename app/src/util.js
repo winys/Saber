@@ -23,15 +23,6 @@ export default {
         
         msg.visiable = true;
     },
-    //关闭通知
-    closeMessage(config,callback){
-        let msg = Saber.message;
-        var i;
-        msg.items.splice(
-            config.num,
-            1
-        );
-    },
     //底部消息
     statusMsg( config, callback) {
         Saber.statusbar.statusMsg = config.statusMsg;
@@ -93,22 +84,61 @@ export default {
 
         return storage.setItem(id.toString(), JSON.stringify(data));  
     },
-    _existFile(path){
+    _existFile(spath){
         let fstat;
         try {
-            fstat = fs.statSync(path);
+            fstat = fs.statSync(spath);
         }catch(e){
             return null;
         }
         return fstat;
     },
-    hasPlugin( path ){
-        console.log(path)
+    _hasPlugin( plugin_path ){
         //TODO:后期修改
-        let fstat = Saber._existFile(path);
-        return fstat && fstat.isDirectory()
-            ? Saber._existFile(path+"/Saber.json") !== null
-            : Saber._existFile(path + ".vue") !== null
+        let fstat = Saber._existFile(plugin_path);
+        return fstat !== null;
+    },
+    _copyFile: async function( dst, src){
+        //检查是否存在源文件（夹）
+        console.log(src);
+        if( !Saber._existFile(src) )return false;
+        //复制目录
+        let files = await fs.readdir(src);
+        console.log(files);
+        //复制文件
+    },
+    install ( plugin_path ){        
+        let plugin_info_path = path.resolve(plugin_path,"./saber.json");
+        if ( !Saber._hasPlugin(plugin_info_path) ){
+            Saber.sendMessage({
+                type: "错误",
+                text: "插件安装失败：并未发现插件"
+            });
+            return;
+        }
+        let plugin_info = node_require(plugin_info_path);
+        let confirm = dialog.showMessageBox( BrowserWindow.getFocusedWindow(),{
+            type: "none",
+            buttons: ["安装","取消"],
+            defaultId: 0,
+            cancelId: 1,
+            title : "确认安装",
+            message : "检查到插件 " + plugin_info.name + "（V" + (plugin_info.version || "1.0.0") + "）,您确认安装么？",
+            detail : "版本：" + (plugin_info.version || "1.0.0") + "\n描述：" + plugin_info.descript + "\n作者：" + plugin_info.author.join(",")
+        })
+        
+        if ( confirm === 0 ){
+            //同意安装
+            //1.copy
+            Saber._copyFile("",plugin_path);
+            //2.change the config file
+            Saber.sendMessage({
+                type: "信息",
+                text: "插件安装成功，重启以使用插件 《" + plugin_info.name + "》",
+                reload: true
+            });
+        }
+        return;
     },
     _dictSort( obj ){
         let obj2  = {},

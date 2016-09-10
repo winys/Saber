@@ -68,12 +68,10 @@ module.exports =  [
             {
                 label: '全屏模式',
                 accelerator: 'F11',
-                type:"checkbox",
                 role: 'togglefullscreen'
             },
             {
                 label: '调试工具',
-                type:"checkbox",
                 accelerator: 'F12',
                 click (item, focusedWindow){
                     if (focusedWindow) focusedWindow.webContents.toggleDevTools();

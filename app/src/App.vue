@@ -69,6 +69,9 @@ a:focus {
     width: 5px;
 }
 input:focus{
-    outline-color: #007acc;
+    outline: 1px solid rgba(14,99,156,.6);
+}
+.app, .toolbar, .statusbar, .workink, .tablist, .tabpage, .toolManager, .PluginWrapper{
+  -webkit-user-select:none
 }
 </style>
