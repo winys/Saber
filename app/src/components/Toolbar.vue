@@ -2,7 +2,7 @@
     <div class="toolbar" v-show="visiable|hasItem">
         <ul class="toolbar-items">
             <li class="item" v-for="item in items">
-                <a class="vlink" v-bind:class="{ 'active': item.active }" @click="changeTool($index)" name="{{item.plugin}}"><img v-bind:src="{{item.icon}}" class="icon" alt="{{item.name}}"></a>
+                <a class="vlink" v-bind:class="{ 'active': item.active }" @click="changeTool($index)" name="{{item.plugin}}"><img v-bind:src="item.icon" class="icon" alt="{{item.name}}"></a>
             </li>
         </ul>
     </div>
@@ -34,8 +34,16 @@
                 this.items[index].active = true;
                 this.$parent.$broadcast('changeTool',this.items[index].name);
                 this.$nextTick(function (){
-                    callback && callback.call(this);
-                })
+                    callback && callback.call(this);                    
+                    Saber.store("__toolbar", Saber.toolbar.items);
+                });
+            },
+            removeTool ( name ){
+                for (let index in item){
+                    if (item[index].name === name){
+                        item.splice(index,1);
+                    }
+                }
             }
         },
         events: {

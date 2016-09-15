@@ -1,6 +1,6 @@
 import Config from "./config"
 import Util from "./util"
-import plugin from "../plugin/plugin.json"
+import plugin from "../plugins/plugin.json"
 /* target,sources */
 let Saber = Object.assign( Config , Util );
 

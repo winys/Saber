@@ -20,11 +20,17 @@
 </template>
 <script>
     import Saber from "../Saber"
+    const path = node_require('path')
     let components = {};
     for ( let key in  Saber.plugins ){
         let plugin = Saber.plugins[key];
         components[plugin.name]  =  (resolve) => {
-            require(['../../plugin/'+plugin.name], resolve);
+            if(plugin.entry){
+                //console.log(require(path.join('../../plugins/'+plugin.name,plugin.entry ).toString()))
+                require(['../../plugins/'+plugin.name+ "/" +plugin.entry ], resolve);
+            }
+            else 
+                require(['../../plugins/'+plugin.name ], resolve);
         };
     }
     

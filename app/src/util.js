@@ -3,7 +3,7 @@ export default {
     //发送通知
     sendMessage ( config, callback ){
         let msg = Saber.message;
-        var bkcolor = "#007acc";
+        let bkcolor = "#007acc";
         if(config.type == "错误"){
             bkcolor = 'red';
         }
@@ -47,10 +47,10 @@ export default {
 
     },
     isEmpty : function(obj){
-		var type = toString.call(obj);	
+		let type = toString.call(obj);	
 		switch (type) {
 			case '[object Object]' :
-				for( var key in obj ){
+				for( let key in obj ){
 					return false;
 				}
 				return true;
@@ -129,21 +129,97 @@ export default {
         
         if ( confirm === 0 ){
             //同意安装
-            //1.copy
-            Saber._copyFile("",plugin_path);
-            //2.change the config file
-            Saber.sendMessage({
-                type: "信息",
-                text: "插件安装成功，重启以使用插件 《" + plugin_info.name + "》",
-                reload: true
+            let copy = spawn('node', [ 
+                path.resolve(APP_PATH,"./app/src/commands/copy.js"), 
+                plugin_path,
+                path.resolve(Saber.__plugin_path)
+            ]);
+            copy.stderr.on('data', (data) => {
+                console.log(`stderr: ${data}`);
             });
+            copy.stdout.on('data', (data) => {
+                console.log(`stderr: ${data}`);
+            });
+            copy.on('close', (code) => {
+                if (code === 0 ){
+                    Saber.plugins[plugin_info.name] = plugin_info;
+                    fs.writeFile(
+                        path.resolve(Saber.__plugin_path, "./plugin.json"),
+                        JSON.stringify(Saber.plugins,null,4),
+                        "utf8",(err) =>{
+                        if(err){
+                            Saber.sendMessage({
+                                type: "错误",
+                                text: "插件" + plugin_info.name + "安装失败，请重新启动。",
+                                reload: true
+                            });
+                        }
+                        else 
+                            Saber.sendMessage({
+                                type: "信息",
+                                text: "插件安装成功，重启以使用插件 《" + plugin_info.name + "》",
+                                reload: true
+                            });
+                    })
+                }
+                else{
+                    Saber.sendMessage({
+                        type: "错误",
+                        text: "插件" + plugin_info.name + "安装失败，请重新启动。",
+                        reload: true
+                    });
+                }
+            });            
         }
         return;
+    },
+    uninstall ( name ) {
+        //修改配置文件
+        delete Saber.plugins[name];
+        fs.writeFile(
+            path.resolve(Saber.__plugin_path, "./plugin.json"),
+            JSON.stringify(Saber.plugins,null,4),
+            "utf8",(err) =>{
+            if(err){
+                Saber.sendMessage({
+                    type: "错误",
+                    text: "插件" + name + "卸载失败，请重新启动。",
+                    reload: true
+                });
+            }
+            else {
+                //移除文件
+                let  remove = spawn('node', [ 
+                    path.resolve(APP_PATH,"./app/src/commands/remove.js"), 
+                    path.resolve(Saber.__plugin_path, "./" + name)
+                ]);
+                remove.stderr.on('data', (data) => {
+                    console.log(`stderr: ${data}`);
+                });
+                remove.on('close', (code) => {
+                    console.log(code);
+                    if(code === 0 ){
+                        Saber.sendMessage({
+                            type: "信息",
+                            text: "插件卸载成功 《" + name + "》",
+                            reload: true
+                        });
+                    }
+                    else{
+                         Saber.sendMessage({
+                            type: "错误",
+                            text: "插件" + name + "卸载失败，请重新启动。",
+                            reload: true
+                        });
+                    }
+                });
+            }
+        })
     },
     _dictSort( obj ){
         let obj2  = {},
             keys = Object.keys(obj).sort();
-        for (var i = 0, n = keys.length, key; i < n; ++i) {
+        for (let i = 0, n = keys.length, key; i < n; ++i) {
             key = keys[i];
             obj2[key] = obj[key];
         }

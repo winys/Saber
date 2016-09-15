@@ -1,5 +1,5 @@
 export default {
-    __plugin_path : path.resolve(APP_PATH ,"./app/plugin/"),
+    __plugin_path : path.resolve(APP_PATH ,"./app/plugins/"),
     statusbar:{
         visiable : true,
         statusMsg : "欢迎使用 Saber"
