@@ -6,7 +6,8 @@ export default {
     },
     toolbar:{
         items: [],
-        visiable : true,
+        visiable : false,
+        active:0
     },
 
     workink:{

@@ -204,6 +204,7 @@ export default {
                             text: "插件卸载成功 《" + name + "》",
                             reload: true
                         });
+                        Saber.App.$broadcast("closetool", name);
                     }
                     else{
                          Saber.sendMessage({

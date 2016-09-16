@@ -92,7 +92,12 @@
             //
             closeTab(index){
                 let pageid = this.pages[index].id;
-                if(this.pages[index] && this.curpage === pageid){                              
+                if(this.pages.length <=1 ){
+                    this.pages.splice( index , 1);
+                    Saber.store("__pageinfo_"+this.name, null);
+                    this.$root.$broadcast("closetool", this.name);
+                }
+                else if(this.pages[index] && this.curpage === pageid){                              
                     this.pages.splice( index , 1);
                     this.$nextTick(function(){                        
                         this.changeItem(this.pages[index%this.pages.length].id);

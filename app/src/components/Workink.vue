@@ -37,6 +37,9 @@
                      this.$set("currentView", "notfound");
                 }
                 this.$set("visiable", true);
+            },
+            "closetool" ( name ){
+                Saber.store("__pageinfo_"+name, null );
             }
         },
         filters:{

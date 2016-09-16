@@ -2,7 +2,7 @@
     <div class="toolbar" v-show="visiable|hasItem">
         <ul class="toolbar-items">
             <li class="item" v-for="item in items">
-                <a class="vlink" v-bind:class="{ 'active': item.active }" @click="changeTool($index)" name="{{item.plugin}}"><img v-bind:src="item.icon" class="icon" alt="{{item.name}}"></a>
+                <a class="vlink" v-bind:class="{ 'active': $index===active }" @click="changeTool($index)" name="{{item.plugin}}"><img v-bind:src="item.icon" class="icon" alt="{{item.name}}"></a>
             </li>
         </ul>
     </div>
@@ -11,39 +11,37 @@
 <script>
     export default {
         data (){
-            let items = Saber.store("__toolbar");
-            if( Saber.isEmpty(items) ){                
-                items = [];
+            let toolbar_data = Saber.store("__toolbar");
+            if( Saber.isEmpty(toolbar_data) ){                
+                return Saber.toolbar;
             }
             else{
-                Saber.toolbar.items = items;
+                Saber.toolbar = toolbar_data;
             }
-            for( let item of items ){
-                if(item.active){
-                    Saber.workink.currentView = item.name;
-                    break;
-                }
-            }
+            Saber.workink.currentView = toolbar_data.items[toolbar_data.active].name;
+            Saber.toolbar.active = toolbar_data.active;
             return Saber.toolbar;
         },
         methods : {
             changeTool ( index, callback ) {
-                for (let item of this.items){
-                    item.active = false;
-                }
-                this.items[index].active = true;
+                let items = this.items;
+                this.$set("active",parseInt(index));
                 this.$parent.$broadcast('changeTool',this.items[index].name);
                 this.$nextTick(function (){
                     callback && callback.call(this);                    
-                    Saber.store("__toolbar", Saber.toolbar.items);
+                    Saber.store("__toolbar", Saber.toolbar);
                 });
             },
-            removeTool ( name ){
-                for (let index in item){
-                    if (item[index].name === name){
-                        item.splice(index,1);
+            closeTool ( name ){                
+                let items = this.items;
+                for (let index in items){
+                    if (items[index].name === name){
+                        items.splice(index,1);
+                        this.changeTool((index+1)%this.items.length);
+                        break;
                     }
                 }
+                Saber.store("__toolbar", Saber.toolbar);
             }
         },
         events: {
@@ -51,22 +49,27 @@
                 let temp = this.items;
                 let has = -1;
                 for (let index in temp){
-                    if(temp[index].name === toolid)
-                        has =index;
+                    if(temp[index].name === toolid){
+                        has = index;
+                        break;
+                    }
                 }
                 if( has < 0 ){
-                    temp.push( Saber.plugins[toolid] );
+                    let newitem = Saber.plugins[toolid];
+                    temp.$set( temp.length, newitem );
                     this.visiable = true;
-                    this.changeTool(temp.length-1,function(){                        
-                        this.$parent.$broadcast('newpage',toolid);
-                    });
-                    Saber.store("__toolbar", Saber.toolbar.items);
-                }
-                else{
-                    this.changeTool(has,function(){                        
+                    this.changeTool(temp.length-1,function(){
                         this.$parent.$broadcast('newpage_' + toolid ,toolid);
                     });
                 }
+                else{
+                    this.changeTool(has,function(){
+                        this.$parent.$broadcast('newpage_' + toolid ,toolid);
+                    });
+                }
+            },
+            "closetool" (name){
+                this.closeTool(name);
             }
         },
         filters:{
