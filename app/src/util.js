@@ -1,4 +1,9 @@
-import crypto from 'crypto'
+const path = node_require('path');
+const crypto = node_require('crypto');
+const fs = node_require('fs');
+const spawn = node_require('child_process').spawn;
+const {dialog,BrowserWindow} = node_require('electron').remote;
+
 export default {
     //发送通知
     sendMessage ( config, callback ){
@@ -44,6 +49,10 @@ export default {
     isArray : Array.isArray,
     isObject (obj) {
         return toString.call(obj) === "[object Object]";
+
+    },
+    isString (obj) {
+        return toString.call(obj) === "[object String]";
 
     },
     isEmpty : function(obj){
@@ -204,7 +213,6 @@ export default {
                             text: "插件卸载成功 《" + name + "》",
                             reload: true
                         });
-                        Saber.App.$broadcast("closetool", name);
                     }
                     else{
                          Saber.sendMessage({
@@ -213,6 +221,7 @@ export default {
                             reload: true
                         });
                     }
+                    App.$broadcast("closetool", name);
                 });
             }
         })

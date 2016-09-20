@@ -1,3 +1,4 @@
+const path = node_require('path');
 export default {
     __plugin_path : path.resolve(APP_PATH ,"./app/plugins/"),
     statusbar:{

@@ -1,7 +1,7 @@
 <template>
     <div class="toolbar" v-show="visiable|hasItem">
         <ul class="toolbar-items">
-            <li class="item" v-for="item in items">
+            <li class="item" v-for="item in items"  @contextmenu="contextmenu($index)">
                 <a class="vlink" v-bind:class="{ 'active': $index===active }" @click="changeTool($index)" name="{{item.plugin}}"><img v-bind:src="item.icon" class="icon" alt="{{item.name}}"></a>
             </li>
         </ul>
@@ -9,17 +9,19 @@
 </template>
 
 <script>
+    const remote = node_require('electron').remote;
+    const {Menu, MenuItem} = remote;  
     export default {
         data (){
             let toolbar_data = Saber.store("__toolbar");
             if( Saber.isEmpty(toolbar_data) ){                
                 return Saber.toolbar;
             }
-            else{
-                Saber.toolbar = toolbar_data;
+            Saber.toolbar = toolbar_data;
+            if(!Saber.isEmpty(toolbar_data.items)){
+                Saber.workink.currentView = toolbar_data.items[toolbar_data.active].name;
+                Saber.toolbar.active = toolbar_data.active;
             }
-            Saber.workink.currentView = toolbar_data.items[toolbar_data.active].name;
-            Saber.toolbar.active = toolbar_data.active;
             return Saber.toolbar;
         },
         methods : {
@@ -27,21 +29,48 @@
                 let items = this.items;
                 this.$set("active",parseInt(index));
                 this.$parent.$broadcast('changeTool',this.items[index].name);
+                let self = this;
                 this.$nextTick(function (){
-                    callback && callback.call(this);                    
+                    callback && callback.call(self);                    
                     Saber.store("__toolbar", Saber.toolbar);
                 });
             },
-            closeTool ( name ){                
+            closeTool ( name ){
+                if( Saber.isEmpty(name) ) return;      
+                
                 let items = this.items;
                 for (let index in items){
                     if (items[index].name === name){
                         items.splice(index,1);
-                        this.changeTool((index+1)%this.items.length);
+                        if( items.length > 0 )
+                            this.changeTool((index+1)%this.items.length);
                         break;
                     }
                 }
+                
                 Saber.store("__toolbar", Saber.toolbar);
+            },
+            contextmenu( index ){
+                const menu = new Menu();
+                let event = window.event;
+                let self = this;
+                let items = this.items;
+                menu.append(new MenuItem({
+                    label: '新建', click(){
+                        self.changeTool(index, function (){                          
+                            this.$parent.$broadcast('newpage_' + this.items[index].name ,this.items[index].name);
+                        })
+                    }
+                }));
+                menu.append(new MenuItem({
+                     label: '关闭', click() { 
+                        self.$parent.$broadcast("closetool",self.items[index].name)
+                    }
+                }));
+                
+                menu.popup(remote.getCurrentWindow());
+                event.preventDefault();
+                event.stopPropagation();
             }
         },
         events: {

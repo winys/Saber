@@ -41,9 +41,6 @@ html,body{
     zoom: 1.25;
   }
 }
-::selection{
-  background: #ff8f00;
-}
 #app{
   display: flex;
   background: #1e1e1e;
@@ -67,6 +64,7 @@ a:focus {
 ::-webkit-scrollbar {
     background: #1e1e1e;
     width: 5px;
+    height: 5px;
 }
 input:focus{
     outline: 1px solid rgba(14,99,156,.6);

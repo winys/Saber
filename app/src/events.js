@@ -1,3 +1,5 @@
+const {ipcRenderer} = node_require('electron')
+
 ipcRenderer.on("newtool",function(){
     if(global.App === undefined){
         alert("未发现应用");
@@ -13,10 +15,11 @@ ipcRenderer.on("toollist",function(){
         alert("未发现应用");
         return;
     }
-    App.$broadcast("ToolList",{
+    App.$broadcast("ToolPanel",{
         title:"工具管理"
     });
 })
+
 ipcRenderer.on("installtool",function(){
     if(global.App === undefined){
         alert("未发现应用");

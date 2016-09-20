@@ -3,7 +3,7 @@
         <component id="{{currentView}}"
             :is="currentView"
             :curview="currentView"
-            keep-alive>
+            >
         </component>
     </div>
 </template>
@@ -58,6 +58,6 @@
         display: flex;
         flex-direction: column;
         align-items: stretch;
-        width: calc(100% - 50px);
+        overflow: hidden;
     }
 </style>

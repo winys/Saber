@@ -20,7 +20,9 @@
 </template>
 <script>
     import Saber from "../Saber"
-    const path = node_require('path')
+    const path = node_require('path'); 
+    const remote = node_require('electron').remote;
+    const {Menu, MenuItem} = remote;  
     let components = {};
     for ( let key in  Saber.plugins ){
         let plugin = Saber.plugins[key];
@@ -49,16 +51,15 @@
         props: ['curview'],
         components,        
         ready(){
-            if(Saber.isEmpty(this.pages))
+            this.$on(`newpage_${this.name}`,  function(name){
                 this.newPage();
+            });
+            if(Saber.isEmpty(this.pages))
+                return;
             this.curpage = this.pages[0].id;
             this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
                     item.classList.add("active");
                 });
-
-            this.$on(`newpage_${this.name}`,  function(name){
-                this.newPage();
-            });
         },
         methods:{
             newPage () {
@@ -118,14 +119,7 @@
             scroll(){                
                 let event = window.event;
                 let target = this.$el.getElementsByClassName("tablist")[0];
-                let pos = parseInt(target.style.marginLeft||0) + event.wheelDelta;
-                if(
-                    target.lastElementChild.offsetLeft+target.lastElementChild.offsetWidth<=target.offsetWidth+target.offsetLeft||
-                    pos>0||
-                    Math.abs(pos)>target.offsetWidth+target.offsetLeft
-                )return;
-                target.style.marginLeft = pos +"px";
-                event.stopPropagation();
+                target.scrollLeft = target.scrollLeft - event.wheelDelta/5;
             },
             //右键菜单
             contextmenu( index ){

@@ -25,6 +25,7 @@
 </template>
 
 <script>
+    const {dialog,BrowserWindow} = node_require('electron').remote;
     export default {
         data(){
             return {
