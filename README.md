@@ -25,3 +25,10 @@ And  We hope you will join us.
 > Tips2: If you can`t download electron, you could unzip [dist.zip](https://github.com/winys/Saber/releases/tag/dist.zip) to __node_modules/electron-prebuilt/dist__
 
 
+### Img Like
+
+![saber_img1](https://raw.githubusercontent.com/winys/imghub/master/saber_img1.PNG)
+![saber_img2](https://raw.githubusercontent.com/winys/imghub/master/saber_img2.PNG)
+
+
+
