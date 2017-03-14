@@ -14,7 +14,7 @@
 			<label>响应内容</label>
 			<div class="res_content" :class="{fullscreen: fullscreen}"  @click="jsonactive($event)" @contextmenu="contextmenu">
         		<!--<textarea name="http_header" id="" cols="30" rows="10" v-model="content"></textarea>-->
-				<json-viewer class="json-view" v-if="data" :itemObj="data"></json-view>
+				<json-viewer class="json-view" v-if="data" :itemObj="data"></json-viewer>
 			</div>
 		</section>
     </div>

@@ -36,6 +36,7 @@
     "url-loader": "^0.5.7",
     "vue-hot-reload-api": "^1.2.0",
     "vue-loader": "^9.4.0",
+    "vuex": "^2.2.1",
     "webpack": "^1.12.2",
     "webpack-dev-middleware": "^1.4.0",
     "webpack-hot-middleware": "^2.6.0",
