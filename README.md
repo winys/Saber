@@ -20,6 +20,6 @@ And  We hope you will join us.
     npm run dev
     node_modules/electron-prebuilt/dist/electron.exe main.js
     ```
-> Tips: If you use vscode to run it, you could just press #F5# to run it.
+> Tips: If you use vscode to run it, you could just press **F5** to run it.
 
 
