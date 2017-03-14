@@ -1,0 +1,35 @@
+{
+    "Bar": {
+        "name": "Bar",
+        "version": "1.0.0"
+    },
+    "foo": {
+        "name": "foo",
+        "version": "1.0.0",
+        "active": true
+    },
+    "saber_chttp": {
+        "name": "saber_chttp",
+        "version": "1.0.0",
+        "descript": "模拟发送报文测试器",
+        "author": [
+            "winys 824350760@qq.com"
+        ],
+        "entry": "saber_chttp.vue",
+        "mod": "dev",
+        "multiple": true,
+        "autoupdate": false
+    },
+    "saber_iconv": {
+        "name": "saber_iconv",
+        "version": "1.0.0",
+        "descript": "字符串编解码",
+        "author": [
+            "winys 824350760@qq.com"
+        ],
+        "entry": "saber_iconv.vue",
+        "mod": "dev",
+        "multiple": true,
+        "autoupdate": false
+    }
+}
