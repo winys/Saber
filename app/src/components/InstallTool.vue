@@ -14,7 +14,7 @@
             <div class="slide_item">
                 <label>本地安装路径</label>
                 <div class="openfolder" :class="{openfolder_focus:focus}">
-                    <input type="text" @focus="onfocus" @blur="onblur" v-model="toolpath" placeholder="目前仅支持文件夹" lazy/><i class="fa fa-folder-open-o folder" aria-hidden="true" @click="openFolder"></i>
+                    <input type="text" @focus="onfocus" @blur="onblur" v-model="toolpath" v-text="toolpath.toString()" placeholder="目前仅支持文件夹" lazy/><i class="fa fa-folder-open-o folder" aria-hidden="true" @click="openFolder"></i>
                 </div>
             </div>
             <div class="op">
@@ -30,14 +30,14 @@
         data(){
             return {
                 toolurl: "",
-                toolpath: [],
+                toolpath: "",
                 more_setting: false,
                 focus: false
             }
         },
         methods : {
             moreSetting(){
-                this.$set("more_setting",!this.more_setting);
+                this.more_setting = !this.more_setting;
             },
             onfocus (){
                 this.focus = true;
@@ -50,7 +50,7 @@
                     properties :["openDirectory"]
                 })
                 if( !Saber.isEmpty(path) ){
-                    this.$set("toolpath", path);
+                    this.toolpath = path;
                 }
             },
             localInstall(){

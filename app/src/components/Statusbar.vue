@@ -8,14 +8,15 @@
 
 <script>
     export default {
-        data (){
-            return Saber.statusbar;
+        computed:{
+            visiable () { return this.$store.state.Statusbar.visiable },
+            statusMsg () { return this.$store.state.Statusbar.statusMsg }
         },
         methods:{
-            change(){
+            change () {
                 Saber.sendMessage({
-                    type: "tt",
-                    text: "的话就卡时间看电视"
+                    type: "信息",
+                    text: "当前版本 V1.0.0， 欢迎使用Saber！"
                 });
             }
         }

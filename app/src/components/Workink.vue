@@ -1,6 +1,6 @@
 <template>
-    <div class="workink" daata-type="{{currentView}}" v-show="visiable|hasItem">
-        <component id="{{currentView}}"
+    <div class="workink" :data-type="currentView" v-show="show">
+        <component :id="currentView"
             :is="currentView"
             :curview="currentView"
             >
@@ -8,7 +8,6 @@
     </div>
 </template>
 <script>
-    //在Vue初始化前没有Saber
     import Saber from "../Saber"
     import PluginWrapper from './PluginWrapper'
     let components = {};
@@ -24,31 +23,16 @@
     };
 
     export default {
-        data(){
-            return Saber.workink;
-        },
-        components,
-        events: {
-            "changeTool" (name) {
-                if(name in Saber.plugins){
-                    this.$set("currentView", name);
-                }
-                else{
-                     this.$set("currentView", "notfound");
-                }
-                this.$set("visiable", true);
-            },
-            "closetool" ( name ){
-                Saber.store("__pageinfo_"+name, null );
-            }
-        },
-        filters:{
-            hasItem(){
+        computed: {
+            currentView () {return this.$store.state.Workink.currentView},
+            show () {
+                let visiable = this.$store.state.Workink.visiable;
                 return ( Saber.isEmpty(this.currentView) )
-                    ? (this.visiable=false)
-                    : this.visiable;
+                    ? false
+                    : visiable;
             }
-        }
+        },
+        components
     }
 </script>
 <style>

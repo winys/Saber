@@ -5,8 +5,9 @@ ipcRenderer.on("newtool",function(){
         alert("未发现应用");
         return;
     }
-    App.$broadcast("ToolList",{
-        title:"请选择工具"
+    Saber.emit("openToolManager",{
+        title:"请选择工具",
+        type:"toollist",
     });
 })
 
@@ -15,8 +16,9 @@ ipcRenderer.on("toollist",function(){
         alert("未发现应用");
         return;
     }
-    App.$broadcast("ToolPanel",{
-        title:"工具管理"
+    Saber.emit("openToolManager",{
+        title:"工具管理",
+        type:"toolpanel",
     });
 })
 
@@ -25,8 +27,9 @@ ipcRenderer.on("installtool",function(){
         alert("未发现应用");
         return;
     }
-    App.$broadcast("InstallTool",{
-        title:"安装工具"
+    Saber.emit("openToolManager",{
+        title:"安装工具",
+        type:"installtool",
     });
 })
 ipcRenderer.on("zoomin",function(){

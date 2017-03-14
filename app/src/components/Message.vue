@@ -1,11 +1,11 @@
 <template>
     <div class="global-message-list" v-if="visiable" style="top: 0px;">
         <ul class="message-list">
-            <li class="message-list-entry" v-for="item in items">
+            <li class="message-list-entry" v-for="(item,index) in items">
                 <div class="message-action" >
                     <a class="restart" v-if="item.restart" tabindex="0" role="button" @click="restart">
                         立即重启
-                    </a><a class="action-button" tabindex="0" role="button" @click="close($index)">
+                    </a><a class="action-button" tabindex="0" role="button" @click="close(index)">
                         关闭
                     </a>
                  </div><div class="message-left-side">
@@ -20,6 +20,10 @@
 <script>
     import Saber from "../Saber";
     export default {
+        computed: {
+            items () { return this.$store.state.Message.items; },
+            visiable () { return this.$store.state.Message.visiable; } 
+        },
         methods:{            
             close(index){
                 this.items.splice(index,1);
@@ -27,9 +31,6 @@
             restart(){
                 Saber._restart(0, "老子不玩了");
             }
-        },
-        data (){
-           return Saber.message;
         }
     }
 </script>

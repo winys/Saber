@@ -5,28 +5,10 @@ const spawn = node_require('child_process').spawn;
 const {dialog,BrowserWindow} = node_require('electron').remote;
 
 export default {
+    __plugin_path : path.resolve(APP_PATH ,"./app/plugins/"),
     //发送通知
     sendMessage ( config, callback ){
-        let msg = Saber.message;
-        let bkcolor = "#007acc";
-        if(config.type == "错误"){
-            bkcolor = 'red';
-        }
-        else if(config.type == "警告"){
-            bkcolor = "#ff8f00";
-        }
-        msg.items.push({
-            type: config.type || "信息",
-            text : config.text || "",
-            restart : config.restart || false,
-            bkcolor : bkcolor
-        });
-        
-        if(msg.items.length>=5){
-            msg.items.splice(0,1);
-        }
-        
-        msg.visiable = true;
+        Saber.emit( 'sendMessage', config );
     },
     //底部消息
     statusMsg( config, callback) {
@@ -47,6 +29,9 @@ export default {
 		return str.replace(/\+/g, '_').replace(/\//g, '-');
 	},
     isArray : Array.isArray,
+    isFunction ( obj ) {
+        return toString.call(obj) === "[object Function]";
+    },
     isObject (obj) {
         return toString.call(obj) === "[object Object]";
 
@@ -55,6 +40,11 @@ export default {
         return toString.call(obj) === "[object String]";
 
     },
+    isRegExp (obj) {
+        return toString.call(obj) === "[object RegExp]";
+
+    },
+    
     isEmpty : function(obj){
 		let type = toString.call(obj);	
 		switch (type) {
@@ -85,13 +75,22 @@ export default {
         if(id === null){
             return storage.clear();
         }
-        if(data === null){
-            return storage.removeItem(id);
+        if( Saber.isRegExp(id) ){
+            for(var key in storage){
+                if(id.test(key)){
+                    this.store(key,data);
+                }
+            }
         }
-        if(this.isEmpty(data))
-            return JSON.parse(storage.getItem(id.toString())) || {};
-
-        return storage.setItem(id.toString(), JSON.stringify(data));  
+        else{
+            if(data === null){
+                return storage.removeItem(id);
+            }
+            if(this.isEmpty(data)){
+                return JSON.parse(storage.getItem(id.toString())) || {};
+            }
+            return storage.setItem(id.toString(), JSON.stringify(data));  
+        }
     },
     _existFile(spath){
         let fstat;
@@ -183,48 +182,68 @@ export default {
         return;
     },
     uninstall ( name ) {
-        //修改配置文件
-        delete Saber.plugins[name];
-        fs.writeFile(
-            path.resolve(Saber.__plugin_path, "./plugin.json"),
-            JSON.stringify(Saber.plugins,null,4),
-            "utf8",(err) =>{
-            if(err){
-                Saber.sendMessage({
-                    type: "错误",
-                    text: "插件" + name + "卸载失败，请重新启动。",
-                    reload: true
-                });
-            }
-            else {
-                //移除文件
-                let  remove = spawn('node', [ 
-                    path.resolve(APP_PATH,"./app/src/commands/remove.js"), 
-                    path.resolve(Saber.__plugin_path, "./" + name)
-                ]);
-                remove.stderr.on('data', (data) => {
-                    console.log(`stderr: ${data}`);
-                });
-                remove.on('close', (code) => {
-                    console.log(code);
-                    if(code === 0 ){
-                        Saber.sendMessage({
-                            type: "信息",
-                            text: "插件卸载成功 《" + name + "》",
-                            reload: true
-                        });
-                    }
-                    else{
-                         Saber.sendMessage({
-                            type: "错误",
-                            text: "插件" + name + "卸载失败，请重新启动。",
-                            reload: true
-                        });
-                    }
-                    App.$broadcast("closetool", name);
-                });
-            }
+        let plugin_info = Saber.plugins[name];
+        if ( Saber.isEmpty(plugin_info) ){
+            Saber.sendMessage({
+                type: "错误",
+                text: "插件安装失败：并未发现插件"
+            });
+            return;
+        }
+        let confirm = dialog.showMessageBox( BrowserWindow.getFocusedWindow(),{
+            type: "none",
+            buttons: ["卸载","取消"],
+            defaultId: 1,
+            cancelId: 1,
+            title : "确认卸载",
+            message : "确定卸载 " + plugin_info.name + "（V" + (plugin_info.version || "1.0.0") + "）吗？",
+            detail : "版本：" + (plugin_info.version || "1.0.0") + "\n描述：" + plugin_info.descript + 
+                "\n作者：" + ( plugin_info.author&&plugin_info.author.join(",")||"未知" )
         })
+        if ( confirm === 0 ){
+            //修改配置文件
+            delete Saber.plugins[name];
+            fs.writeFile(
+                path.resolve(Saber.__plugin_path, "./plugin.json"),
+                JSON.stringify(Saber.plugins,null,4),
+                "utf8",(err) =>{
+                if(err){
+                    Saber.sendMessage({
+                        type: "错误",
+                        text: "插件" + name + "卸载失败，请重新启动。",
+                        reload: true
+                    });
+                }
+                else {
+                    //移除文件
+                    let  remove = spawn('node', [ 
+                        path.resolve(APP_PATH,"./app/src/commands/remove.js"), 
+                        path.resolve(Saber.__plugin_path, "./" + name)
+                    ]);
+                    remove.stderr.on('data', (data) => {
+                        console.log(`stderr: ${data}`);
+                    });
+                    remove.on('close', (code) => {
+                        console.log(code);
+                        if(code === 0 ){
+                            Saber.sendMessage({
+                                type: "信息",
+                                text: "插件卸载成功 《" + name + "》",
+                                reload: true
+                            });
+                        }
+                        else{
+                            Saber.sendMessage({
+                                type: "错误",
+                                text: "插件" + name + "卸载失败，请重新启动。",
+                                reload: true
+                            });
+                        }
+                        Saber.emit("closeTool",name);
+                    });
+                }
+            });
+        }
     },
     _dictSort( obj ){
         let obj2  = {},

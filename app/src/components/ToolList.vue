@@ -1,11 +1,11 @@
 <template>
     <div class="toollist">
         <div class="groups">
-            <div v-for="(key,item) in items" class="group">
+            <div v-for="(item,key) in items" class="group">
                 <div class="group_title"> {{key}} </div>
                 <ul class="group_content">
-                    <li class="toolitem" v-for="tool of item" @click="createTool(tool.name)">
-                        <img class="icon" alt="{{tool.name}}">                    
+                    <li class="toolitem" v-for="(tool, index) in item" @click="createTool(tool.name)">
+                        <img class="icon" :alt="tool.name">                    
                     </li>
                 </ul>
             </div>
@@ -29,8 +29,7 @@
         },
         methods: {
             createTool(name){
-                this.$root.$broadcast("newtool",name);
-                this.$dispatch("close");
+                Saber.emit("newTool",name);
             }
         }
     }

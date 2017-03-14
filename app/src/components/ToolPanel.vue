@@ -1,24 +1,24 @@
 <template>
     <div class="toolpanel">
         <div class="toolpanel_serch">
-             <input id="search" type="text" v-model="toolurl" placeholder="查找插件" lazy/>
+             <input id="search" type="text" v-model="toolQuery" placeholder="查找插件" lazy/>
         </div>
         <div class="toolpanel_content">
             <ul class="toolpanel_list">
-                <li class="toolitem" v-for="tool of items" @click="toolDetail(tool.name,tool)" id={{tool.name}}>
+                <li class="toolitem" v-for="tool of items" @click="toolDetail(tool.name,tool)" :id="tool.name">
                     <div class="tool_icon">
-                        <img class="icon" alt="{{tool.name}}">
+                        <img class="icon" :alt="tool.name">
                     </div>
                     <div class="tool_des">
                         <div class="tool_header">
-                            <span class="tool_name">{{tool.name | capitalize}}</span>
+                            <span class="tool_name">{{tool.name}}</span>
                             <span class="tool_version">V{{tool.version}}</span>
-                            <span title="基本信息" class="fa fa-info-circle" aria-hidden="true" @click="toolDetail(tool.name)"></span>
+                            <span title="基本信息" class="fa fa-info-circle" aria-hidden="true" @click="toolDetail(tool.name,tool)"></span>
                             <span title="检查更新" class="fa fa-arrow-circle-up" aria-hidden="true" @click="checkUpdate"></span>
-                            <span title="卸载工具" class="fa fa-trash" aria-hidden="true" @click="removeTool"></span>
+                            <span title="卸载工具" class="fa fa-trash" aria-hidden="true" @click="removeTool(tool.name)"></span>
                         </div>
                         <div class="tool_descript">{{tool.descript || "No descript"}}</div>
-                        <div class="tool_descript">{{tool.author || "Unknown author"}}</div>   
+                        <div class="tool_descript">{{tool.author | authorList}}</div>   
                     </div> 
                 </li>
             </ul>
@@ -33,23 +33,37 @@
             for ( let key in  Saber.plugins ){
                 toolinfo.items.push(Saber.plugins[key]);
             }
+            toolinfo.toolQuery = "";
             return toolinfo;
         },
         props:['option'],
+        filters:{
+            'authorList' (author){
+                if(Saber.isEmpty(author))
+                    return "Unknown author";
+                if( Saber.isArray(author) )
+                    return author.join(',');
+                return author.toString();
+            }
+        },
         methods: {
             toolDetail (name,tool) {
-                this.$dispatch("ToolDetail",{
+                Saber.emit("openToolManager",{
+                    type:"tooldetail",
                     title:name,
-                    logo: "fa-chevron-left",
-                    logoClick: function( name ){
-                        this.$dispatch("ToolPanel",{
-                            title:"工具管理",
-                            computed: function(){
-                                document.querySelector("#"+name).scrollIntoView(true);
-                            }
-                        })
-                    },
-                    data : tool             
+                    option:{
+                        logo: "fa-chevron-left",
+                        logoClick: function( name ){
+                            Saber.emit("openToolManager",{
+                                title: "工具管理",
+                                type: "toolpanel",
+                                computed: function(){
+                                    document.querySelector("#"+name).scrollIntoView(true);
+                                }
+                            })
+                        },
+                        data : tool
+                    }       
                 });
             },
             checkUpdate( index ){
@@ -57,8 +71,8 @@
                 alert("没找着！滚边落去。");
                 event.stopPropagation();
             },
-            removeTool( index ){
-                alert("跟谁俩呢，老子不走了！");
+            removeTool( name ){
+                Saber.uninstall( name )
                 event.stopPropagation();
             },
         }
@@ -111,6 +125,7 @@
     }
     .toolpanel .toolitem:hover{
         background-color: hsla(0,0%,100%,.08);
+        box-shadow: 1px 1px 5px black;
     }
     .toolpanel .toolitem .tool_icon{
         border-radius : 50%;
@@ -128,7 +143,7 @@
         overflow: hidden;
     }
     .toolpanel .tool_header .fa{
-        padding: 0 3px;
+        padding: 0 5px;
     }
     .toolpanel .tool_header .fa:hover{
         color: #007acc;

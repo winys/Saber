@@ -1,9 +1,6 @@
-import Config from "./config"
-import Util from "./util"
-import plugin from "../plugins/plugin.json"
-/* target,sources */
-let Saber = Object.assign( Config , Util );
+import Saber from "./util";
+import plugin from "../plugins/plugin.json";
 
 Saber.plugins = Saber._dictSort(plugin);
 
-export default Saber;
+module.exports =  Saber;

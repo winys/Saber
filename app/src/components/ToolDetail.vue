@@ -1,10 +1,10 @@
 <template>
-    <div class="tool_detail" :class={'loading':busy}>
-        <div class="tool_readme">            
-            <link rel="stylesheet" href="./static/css/markdown.css">
-            <article  class='markdown_dark'><div class='markdown-body markdown_dark_container'>
-                {{{readme}}}
-            </article></div>
+    <div class="tool_detail" :class="{'loading':busy}">
+        <div class="tool_readme">
+            <link rel="stylesheet" href="./static/css/markdown.css" scoped>
+            <div class='markdown_dark'>
+                <article class='markdown-body markdown_dark_container' v-html="readme"></article>
+            </div>
         </div>
     </div>
 </template>
@@ -17,7 +17,7 @@
             detail.busy = true;
             return detail;
         },
-        init(){
+        beforeCreate(){
             let self = this;
             const marked = require('marked');
             https.get("https://raw.githubusercontent.com/chjj/marked/master/README.md",function(res){
@@ -39,7 +39,7 @@
         props:['option']
     }
 </script>
-<style>
+<style scoped>
     .tool_readme{
         -webkit-user-select: text;
         overflow-x:hidden;

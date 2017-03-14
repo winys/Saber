@@ -3,7 +3,6 @@
     "configurations": [
         {
             "name": "Launch",
-            "name": "启动",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/main.js",
@@ -18,7 +17,7 @@
             "env": {
                 "NODE_ENV": "development"
             },
-            "externalConsole": false,
+            "console": "internalConsole",
             "sourceMaps": false,
             "outDir": null
         },

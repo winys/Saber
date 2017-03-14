@@ -1,18 +1,22 @@
 <template>
     <div class="PluginWrapper">
         <div class="tablist" @mousewheel="scroll()" @dragover="allowDrop()" @drop="drop()">
-            <div class="tab-item" data-index={{$index}} v-for="page in pages" title="{{page.title}}" draggable="true" data-tabid={{page.id}} 
-            @click="changeItem(page.id)" @contextmenu="contextmenu($index)" @dragstart="drag($index)">
+            <div class="tab-item" v-for="(page,index) in pages" :data-index="index" :title="page.title" draggable="true" 
+                v-bind:class="{ 'active': (curpage===page.id) }" :data-tabid="page.id" 
+                @click="changeItem(page.id)" 
+                @contextmenu="contextmenu(index)" 
+                @dragstart="drag(index)"
+            >
                 <div class="tab-label" >{{page.title}}</div>
-                <div class="action-label" @click="closeTab($index)"><i class="fa fa-times" aria-hidden="true"></i></div>
+                <div class="action-label" @click="closeTab(index)"><i class="fa fa-times" aria-hidden="true"></i></div>
             </div>
         </div>
         <div class="pluginink">
-            <div v-for="page in pages" class="tabpage" data-tabid={{page.id}}>
+            <div v-for="page in pages" class="tabpage" :data-tabid="page.id" :key="page.id" v-bind:class="{ 'active': (curpage===page.id) }">
             <component 
                 :is="curview"
-                :id="page.id"
-                keep-alive>
+                :id="curview + '_' + page.id"
+                >
             </component>
             </div>
         </div>
@@ -20,6 +24,7 @@
 </template>
 <script>
     import Saber from "../Saber"
+    import {mapGetters} from 'vuex'
     const path = node_require('path'); 
     const remote = node_require('electron').remote;
     const {Menu, MenuItem} = remote;  
@@ -40,80 +45,67 @@
         require(["./Notfound"], resolve);
     };
     export default {
-        data () {
-            this.name = this.curview;
-            let pageinfo = Saber.store("__pageinfo_"+this.curview);
-            if(Saber.isEmpty(pageinfo)){
-                pageinfo = {pages:[],curpage:""};
+        computed: {
+            pages (){
+                return this.$store.state.PluginWrapper.pages;
+            },
+            curpage(){
+                return this.$store.state.PluginWrapper.curpage;
             }
-            return pageinfo;
         },
         props: ['curview'],
         components,        
-        ready(){
-            this.$on(`newpage_${this.name}`,  function(name){
-                this.newPage();
-            });
+        mounted(){
             if(Saber.isEmpty(this.pages))
                 return;
-            this.curpage = this.pages[0].id;
-            this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
-                    item.classList.add("active");
-                });
+            
+            let toolbar_data = Saber.store("__pageinfo_"+this.curview);
+            let state = this.$store.state;
+            if( !Saber.isEmpty(toolbar_data) ){
+                state.PluginWrapper.pages = toolbar_data.pages;
+                state.PluginWrapper.curpage = toolbar_data.curpage;
+            }
         },
         methods:{
-            newPage () {
-                let id = Saber.guid();                
-                this.pages.push({title:"page"+(this.pages.length+1),id})
-                this.$nextTick (function(){
-                    this.changeItem(id);
-                    Saber.store("__pageinfo_"+this.name, this.$data);
-                });
-            },
             //切换标签页
             changeItem ( pageId ){
-                if (pageId === this.curpage) {
-                    this.resetPage();
-                    return;
-                }
-                this.$el.querySelectorAll("[data-tabid='" + this.curpage + "']").forEach(function(item){
-                    item.classList.remove("active");
-                });
-                this.$el.querySelectorAll("[data-tabid='"+pageId+"']").forEach(function(item){
-                    item.classList.add("active");
-                });
-                this.curpage = pageId;
-            },
-            //
-            resetPage (){
-                this.$el.querySelectorAll("[data-tabid='"+this.curpage+"']").forEach(function(item){
-                    item.classList.add("active");
+                Saber.emit("changePage",pageId);                
+                this.$nextTick( ()=>{
+                    Saber.store("__pageinfo_"+this.curview, {
+                        pages: this.pages,
+                        curpage: this.curpage
+                    });
                 });
             },
-            //
+            //关闭标签页
             closeTab(index){
                 let pageid = this.pages[index].id;
                 if(this.pages.length <=1 ){
                     this.pages.splice( index , 1);
-                    Saber.store("__pageinfo_"+this.name, null);
-                    this.$root.$broadcast("closetool", this.name);
+                    Saber.store("__pageinfo_"+this.curview, null);
+                    Saber.emit("closeTool", this.curview);
                 }
                 else if(this.pages[index] && this.curpage === pageid){                              
                     this.pages.splice( index , 1);
                     this.$nextTick(function(){                        
                         this.changeItem(this.pages[index%this.pages.length].id);
-                        Saber.store("__pageinfo_"+this.name, this.$data);
+                        Saber.store("__pageinfo_"+this.curview, {
+                            pages: this.pages,
+                            curpage: this.curpage
+                        });
                     });
                 }
                 else{
                     this.pages.splice( index , 1);
-                    this.$nextTick(function(){                        
-                        this.resetPage();
-                        Saber.store("__pageinfo_"+this.name, this.$data);
+                    this.$nextTick(function(){
+                        Saber.store("__pageinfo_"+this.curview, {
+                            pages: this.pages,
+                            curpage: this.curpage
+                        });
                     });
                 }
-                Saber.store(pageid,null);
-                window.event.stopPropagation();
+                Saber.store(this.curview + "_" + pageid,null);
+                window.event && window.event.stopPropagation();
             },
             //滚动
             scroll(){                
@@ -128,20 +120,31 @@
                 let self = this;
                 menu.append(new MenuItem({label: '关闭', click() { self.closeTab(index) }}));
                 menu.append(new MenuItem({label: '关闭右侧', click(){
-                    self.pages.splice(index+1);
+                    let closed = self.pages.splice(index+1);
+                    closed.forEach(function (item) {
+                        Saber.store(self.curview + "_" + item.id,null);
+                    })
                     self.$nextTick(() => {                        
                         self.changeItem(self.pages[index%self.pages.length].id);
                     });
                 }}));
                 menu.append(new MenuItem({label: '关闭左侧',  click(){
                     let pageid = self.pages[index%self.pages.length].id;
-                    self.pages.splice(0,index);
+                    let closed = self.pages.splice(0,index);
+                    closed.forEach(function (item) {
+                        Saber.store(self.curview + "_" + item.id,null);
+                    })
                     self.$nextTick(() => {                        
                         self.changeItem(pageid);
                     });
                 }}));
                 menu.append(new MenuItem({label: '关闭其它',  click(){
-                    self.pages=[self.pages[index]];
+                    let pages = self.pages.splice(index,1);
+                    self.pages.forEach( function (item) {
+                        Saber.store(self.curview + "_" + item.id,null);
+                    });
+                    self.$store.state.PluginWrapper.pages = pages;
+
                     self.$nextTick(() => {                        
                         self.changeItem(self.pages[0].id);
                     });
@@ -179,18 +182,18 @@
                 let pagedrag = this.pages[index];
                 this.pages.splice(index,1);
                 this.pages.splice(tagindex,0,pagedrag);
+                this.$nextTick( ()=>{
+                    Saber.store("__pageinfo_"+this.curview, {
+                        pages: this.pages,
+                        curpage: this.curpage
+                    });
+                });
                 event.preventDefault();
             },
             //放下
             allowDrop(){
                 let event = window.event;
                 event.preventDefault();
-            }
-        },
-        events:{
-            "storage" : (id, data) => {
-                if(Saber.isEmpty(id))
-                    Saber.store(id.toString(),JSON.stringify(data));
             }
         }
     }
@@ -286,6 +289,7 @@
     overflow: auto;
 }
 .PluginWrapper .tabpage{
+    height: 100%;
     display:none;
 }
 .PluginWrapper .tabpage.active{

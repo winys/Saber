@@ -1,12 +1,19 @@
-import Vue from 'vue'
-import App from './App'
-import Saber from "./Saber"
+import Vue from 'vue';
+import App from './App';
+import store from './store';
 require("./events");
-/* target,sources */
-global.Saber = Saber;
 
-/* eslint-disable no-new */
-global.App =  new Vue({
-  el: 'body',
-  components: { App }
-})
+global.Saber = require("./Saber");
+
+Saber.__vue_store = store;
+Saber.emit = (...args)=>{
+  Saber.__vue_store.dispatch.apply(Saber.___vue_store, args);
+}
+Saber.commit = (...args)=>{
+  Saber.__vue_store.commit.apply(Saber.___vue_store, args);
+}
+global.App = new Vue({
+  el: '#app',
+  store,
+  render: h => h(App)
+});
