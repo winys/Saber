@@ -22,6 +22,6 @@ And  We hope you will join us.
     ```
 
 > Tips1: If you use vscode to run it, you could just press **F5** to run it.  
-> Tips2: If you can`t download electron, you could unzip [dist.zip](https://github.com/winys/Saber/releases/edit/untagged-3a83f7c4c62d79dccaeb) to __node_modules/electron-prebuilt/dist__
+> Tips2: If you can`t download electron, you could unzip [dist.zip](https://github.com/winys/Saber/releases/tag/dist.zip) to __node_modules/electron-prebuilt/dist__
 
 
