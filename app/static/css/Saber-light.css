@@ -1,0 +1,58 @@
+:root {
+  --mainColor: #FFF;
+  --background : red;
+  --backgroudFont : #1e1e1e;
+  --selection : #007acc;
+  --selection_color : #FFF;
+  --url : rgba(0, 122, 204, 0.64);
+  --scorllerbar: #ccc9c9;
+  --fontColor: #000;
+  --fontFamily : -apple-system,BlinkMacSystemFont,Segoe WPC,Segoe UI,HelveticaNeue-Light,Ubuntu,Droid Sans,sans-serif;
+  /*Message*/
+  --message_fontColor: #eee;  
+  --message_bgcolor: #ccc;
+  --message_shadow: #666;
+  --message_info_type: #007acc;
+  /*Toolbar*/
+  --toolbar_bgcolor: rgb(243, 243, 243);
+  /*ToolManager*/
+  --toolManager_fontColor: #333;
+  --toolManager_active_bgColor: #FFF;
+  --toolManager_header_bgColor: hsla(0,0%,50%,.3);
+  --toolManager_header_btnhover_bgColor: #A2A2A2;
+  /*PluginWrapper*/
+  --PluginWrapper_tablist_bgColor: #DADAD9;
+  --PluginWrapper_tablist_border : rgb(243, 243, 243);
+  --pluginWrapper_tablist_scroll : hsla(0,0%,39%,0.5);
+  --pluginWrapper_tabitem_bgColor: rgb(236, 236, 236);
+  --pluginWrapper_tabitem_active_bgColor: #FFF;
+  /*Statusbar*/
+  --statusbar_bgColor : #007acc;
+  --statusbar_color : #FFF;
+  /*ToolList*/
+  --toollist_title_border: #007acc;
+  /*ToolPanel*/
+  --toolpanel_toolitem_hover_bgColor: hsla(0,0%,100%,.08);
+  --toolpanel_toolitem_boxShadow: black;
+  --toolpanel_toolitem_btn_hover_color: #007acc;
+  /*Preferences*/
+  --prefereces_card_shadow : #8a8a8a;
+  --prefereces_card_category : #f7f7f7;
+  /*HotKey */
+  --hotkey_item_border: #e7e7e7;
+  /*form*/
+  --linkColor: rgba(0, 122, 204, 0.64);
+  --link_hover_color: #007acc;
+  --input_background: #FFF;
+  --input_outline: rgba(14,99,156,.6);
+  --input_border: rgb(169, 169, 169);
+  --btn_background: #0e639c;
+  --btn_color: #FFF;
+  --textarea_bgColor: #FFF;
+  --textarea_color: #000;
+  --textarea_border: rgb(169, 169, 169);
+  --select_bgColor :  #FFF;
+  --select_color :  #000;
+  --select_border :  rgb(169, 169, 169);
+  --loading_color: #007acc;
+}

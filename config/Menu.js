@@ -21,6 +21,12 @@ module.exports =  [
                 }
             },
             {
+                label: '偏好设定',
+                click (item, focusedWindow){
+                    focusedWindow.send("preferences");
+                }
+            },
+            {
                 type:"separator"
             },
             {
@@ -85,9 +91,24 @@ module.exports =  [
             {
                 label: "开发文档",
                 click(item,focusedWindow){
-                
+                    const {shell} = require("electron");                    
+                    const path = require('path');
+                    const package = require(path.resolve(__dirname,"../package.json"));
+                    shell.openExternal(package.__help);
                 } 
-            }
+            },
+            {
+                type:"separator"
+            },
+            {
+                label: "Saber反馈",
+                click(item, focusedWindow){
+                    focusedWindow.send("feedback");
+                }
+            },
+            {
+                label:"关于Saber"
+            },
         ]
     }
 ];
