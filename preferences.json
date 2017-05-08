@@ -1,0 +1,12 @@
+{
+    "theme": "Saber-dark",
+    "lang": "CN",
+    "mini_enable": true,
+    "mini_method":"alternative",
+    "close": "close",
+    "devmodel":false,
+    "global_hotkey":[],
+    "local_hotkey":[],    
+    "main_offset" :[],
+    "mini_offset" :[]
+}
