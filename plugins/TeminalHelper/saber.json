@@ -1,0 +1,10 @@
+{
+	"name":"TeminalHelper",
+	"version" : "1.0.0",
+	"descript" : "终端助手",
+	"author":["winys 824350760@qq.com"],
+	"entry" : "TeminalHelper.vue",
+	"mod" : "dev",
+	"multiple" : true,
+	"autoupdate" : false
+}

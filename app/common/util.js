@@ -179,7 +179,7 @@ let _util = {
         if ( confirm === 0 ){
             //同意安装
             let copy = spawn('node', [ 
-                path.join(Saber.APP_PATH,"./app/common/commands/copy.js"), 
+                path.join(Saber.APP_PATH,"./app/common/commands/file/copy.js"), 
                 plugin_path,
                 path.resolve(Saber.__plugin_path)
             ]);
@@ -264,7 +264,7 @@ let _util = {
                 else {
                     //移除文件
                     let  remove = spawn('node', [ 
-                        path.join(Saber.APP_PATH,"./app/common/commands/remove.js"), 
+                        path.join(Saber.APP_PATH,"./app/common/commands/file/remove.js"), 
                         path.join(Saber.__plugin_path, "./" + name)
                     ]);
                     remove.stderr.on('data', (data) => {
@@ -339,6 +339,19 @@ let _util = {
             title : opt.title||"Saber",
             message : (opt.message||"").valueOf().toString()
         });
+    },
+
+    /**
+     * http 客户端
+     * @param {*} req 请求对象 包括url，body，headers 
+     */
+    request ( req ) {
+        let fetch = node_require('node-fetch');
+        return fetch( req.url, {
+            method: req.method,
+            body: Saber.isString( req.body ) ? req.body : JSON.stringify( req.body ),
+            headers : req.headers
+        })
     }
 }
 
