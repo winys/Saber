@@ -73,7 +73,7 @@
                 event.stopPropagation();
             },
             removeTool( name ){
-                Saber.uninstall( name )
+                Saber.toolManager.uninstall( name )
                 event.stopPropagation();
             },
             getIconPath (plugin) {

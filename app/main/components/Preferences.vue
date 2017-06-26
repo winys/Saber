@@ -118,8 +118,8 @@
             },
             localInstall(){
                 if (Saber.isArray(this.toolpath))
-                    Saber.install(this.toolpath[0]);
-                else Saber.install(this.toolpath);
+                    Saber.toolManager.install(this.toolpath[0]);
+                else Saber.toolManager.install(this.toolpath);
             }
         }
     }
