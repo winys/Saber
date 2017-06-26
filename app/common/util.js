@@ -91,6 +91,11 @@ let _util = {
 				return false;
 		}
 	},
+
+    isError ( obj ){
+        return toString.call(obj) === "[object Error]";
+    },
+    
     clone : require('deepcopy'),
     /**
      * Localstorage存储
@@ -346,12 +351,12 @@ let _util = {
      * @param {*} req 请求对象 包括url，body，headers 
      */
     request ( req ) {
-        let fetch = node_require('node-fetch');
-        return fetch( req.url, {
-            method: req.method,
-            body: Saber.isString( req.body ) ? req.body : JSON.stringify( req.body ),
-            headers : req.headers
-        })
+        return new Promise ((rs,rj)=>{
+            ipcRenderer.send('request', req);
+            ipcRenderer.on('request_callback',function(sender ,data){
+                rs(data);
+            })
+        });
     }
 }
 

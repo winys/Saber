@@ -98,7 +98,8 @@ let ToolManager = {
         title:"工具管理",
         visiable:false,
         currentView:"",
-        option:{}
+        option:{},
+        width: 300
     },
     mutations : {
         'OPEN_TOOLMANAGER'( state, options ){;
@@ -115,6 +116,9 @@ let ToolManager = {
         },
         "CLOSE_TOOLMANAGER" ( state ){
             state.visiable = false;
+        },
+        "RESIZE_TOOLMANAGER" ( state, width){
+            state.width = width;
         }
     }
 }

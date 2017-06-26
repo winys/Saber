@@ -15,12 +15,13 @@
             let detail = {};
             detail.readme = "";
             detail.busy = true;
+            detail.tool = this.$store.state.ToolManager.option.data;
             return detail;
         },
-        beforeCreate(){
+        mounted(){
             let self = this;
             const marked = require('marked');
-            https.get("https://raw.githubusercontent.com/chjj/marked/master/README.md",function(res){
+            https.get(`https://raw.githubusercontent.com${self.tool.resourcePath}/master/README.md`,function(res){
                 let md = "";
                 res.on('data', function( data ){
                     md += data;
@@ -35,8 +36,7 @@
                     })
                 })
             })
-        },
-        props:['option']
+        }
     }
 </script>
 <style scoped>

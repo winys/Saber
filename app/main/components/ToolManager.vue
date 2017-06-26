@@ -34,14 +34,15 @@
     export default {
         data(){
             return {
-                width: 300
+                width: this.$store.state.ToolManager.width
             }
         },
         computed:{
             'title' () {return this.$store.state.ToolManager.title},
             'visiable' () {return this.$store.state.ToolManager.visiable},
             'currentView'  ()  {return this.$store.state.ToolManager.currentView},
-            'option' ()  {return this.$store.state.ToolManager.option}
+            'option' ()  {return this.$store.state.ToolManager.option},
+            'width' () {this.$store.state.ToolManager.width}
         },
         components: {
             toollist,installtool,toolpanel,tooldetail,preferences,hotkey,feedback
@@ -64,6 +65,7 @@
                 function mousemove(event){
                     let x = event.clientX-offset.x;
                     vm.$el.style.width = x + "px";
+                    Store.emit("resizeToolManager",x);
                     vm.width = x;
                     document.body.classList.add("ew-resize");
                     if(x <= MIN_WIDTH){
@@ -71,6 +73,7 @@
                         Store.emit("closeToolManager");                        
                         vm.$el.style.width = 300 + "px";
                         vm.width = 300;
+                        Store.emit("resizeToolManager",300);
                     }
                 }
                 function mouseup(){                    

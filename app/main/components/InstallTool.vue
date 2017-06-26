@@ -1,22 +1,35 @@
 <template>
     <div class="install_tool">
         <div>
-            <div>
-                <input type="text" v-model="toolurl" placeholder="Github 项目路径/项目关键词" lazy/>
+            <div class="tool_seacher">
+                <input type="text" v-model="toolurl" @input="searchTool" placeholder="Github 项目路径/项目关键词" lazy/>
             </div>
-            <button @click="loginGithub">
-                点击登陆 Github
-            </button>
+            <div class="toolul_panel">
+                <ul class="toolul">
+                    <toolcard :tool="tool" v-for="tool of nodes"></toolcard>
+                </ul>
+            </div>
+            
         </div>
     </div>
 </template>
 
 <script>
+    import Saber from "../../common/Saber"
+    import toolcard from "./ToolCard"
+
     export default {
         data(){
             return {
-                toolurl: ""
+                toolurl: "",
+                status:"",
+                cursor: "",
+                repositoryCount: 0,
+                nodes: []
             }
+        },
+        components : {
+            toolcard
         },
         computed:{
             github_status () {
@@ -26,6 +39,35 @@
         methods:{
             loginGithub (){
                 Saber.Github.login();
+            },
+            searchTool (){
+                Saber.toolManager.search( this.toolurl ).then((data) => {
+                    if ( data.code ){
+                        this.status = 1;
+                        return;
+                    }
+                    
+                    this.formatData(data);
+                });
+            },
+            formatData (data){
+                const {edges,nodes,repositoryCount} = data.data.search;
+                this.repositoryCount = repositoryCount;
+
+                if( repositoryCount === 0) return;
+
+                edges.forEach( (item, index) => {
+                    nodes[index].cursor = item.cursor;
+                });
+
+                this.cursor = edges[length-1].cursor || "";
+
+                nodes.forEach( (item) => {
+                    item.author = item.owner.login;
+                    item.star = item.stargazers.totalCount;
+                    item.icon = `https://raw.githubusercontent.com${item.resourcePath}/icon.png`
+                });
+                this.nodes = nodes;
             }
         }
     }
@@ -34,7 +76,7 @@
 <style>
 .install_tool{
     font-size: 14px;
-    padding: 10px;
+    padding: 10px 0;
 }
 .install_tool label{
     margin: 10px 0;
@@ -42,7 +84,12 @@
     height: 20px;
     overflow-x: hidden;
 }
-
+.install_tool .tool_seacher{
+    padding: 0 10px;
+}
+.install_tool .toolul{
+    padding: 10px 0;
+}
 .install_tool .op{
     padding: 10px 0;
     display: flex;

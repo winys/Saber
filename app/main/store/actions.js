@@ -9,6 +9,9 @@ export const openToolManager = ({commit},options) => {
 export const closeToolManager = ({commit}) =>{
     commit('CLOSE_TOOLMANAGER');
 }
+export const resizeToolManager = ({commit}, width ) => {
+    commit('RESIZE_TOOLMANAGER', width)
+}
 
 //Toolbar
 export const newTool = ({commit},name) =>{
