@@ -14,7 +14,7 @@ function decode(buffer, encoding, options) {
 /**
  * 执行命令
  * @param {childprocess} child 进程
- * @param {string} encoding 边抹格式
+ * @param {string} encoding 编码格式
  */
 function exec(child, encoding = 'utf8') {
 	//const disposables = [];
@@ -74,7 +74,7 @@ function run(cwd, args, options) {
 	});
 }
 
-modules.exports = {
+module.exports = {
 	exec,
 	decode,
 	run

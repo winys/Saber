@@ -221,7 +221,8 @@
                 Object.freeze(__saber.config);
 
                 __saber.curPlugin = this.curview;
-
+                __saber.require = node_require;
+                __saber.preferences = __saber.config;
                 plugin_win.Saber = Object.freeze(__saber);
             }
         }

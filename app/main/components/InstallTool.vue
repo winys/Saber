@@ -6,7 +6,7 @@
             </div>
             <div class="toolul_panel">
                 <ul class="toolul">
-                    <toolcard :tool="tool" v-for="tool of nodes"></toolcard>
+                    <toolcard :tool="tool" v-for="tool of nodes" key="tool.id"></toolcard>
                 </ul>
             </div>
             
@@ -37,9 +37,6 @@
             }
         },
         methods:{
-            loginGithub (){
-                Saber.Github.login();
-            },
             searchTool (){
                 Saber.toolManager.search( this.toolurl ).then((data) => {
                     if ( data.code ){
@@ -51,21 +48,20 @@
                 });
             },
             formatData (data){
+                if(!data || !data.data || !data.data.search) return;
                 const {edges,nodes,repositoryCount} = data.data.search;
                 this.repositoryCount = repositoryCount;
-
-                if( repositoryCount === 0) return;
 
                 edges.forEach( (item, index) => {
                     nodes[index].cursor = item.cursor;
                 });
 
-                this.cursor = edges[length-1].cursor || "";
+                this.cursor = edges.length > 0 ? edges[edges.length-1].cursor : "";
 
                 nodes.forEach( (item) => {
                     item.author = item.owner.login;
                     item.star = item.stargazers.totalCount;
-                    item.icon = `https://raw.githubusercontent.com${item.resourcePath}/icon.png`
+                    item.icon = `https://raw.githubusercontent.com${item.resourcePath}/release/logo.png`
                 });
                 this.nodes = nodes;
             }

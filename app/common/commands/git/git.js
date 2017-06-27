@@ -30,10 +30,10 @@ function spawn ( args, options ){
  * @param {string} giturl  Git源地址
  * @param {string} dpath 目标路径
  */
-function clone(giturl, dpath){
+function clone(giturl, dpath, branch){
     const urlreg = /^http[s]?:\/\/([\S]+)/;
-    const child = spawn(['clone', giturl, dpath])
-    exec(child).then(result => {
+    const child = spawn(['clone', giturl, dpath,'-b', branch|| 'master'])
+    return exec(child).then(result => {
         if (result.exitCode) {
             let gitErrorCode = null;
             console.log(result.stderr)

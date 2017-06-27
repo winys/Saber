@@ -1,7 +1,6 @@
 const path = node_require('path');
 const crypto = node_require('crypto');
 const fs = node_require('fs');
-const spawn = node_require('child_process').spawn;
 const {dialog, BrowserWindow} = node_require('electron').remote;
 const {ipcRenderer} = node_require('electron');
 const process = node_require('process');
@@ -97,6 +96,7 @@ let _util = {
     },
     
     clone : require('deepcopy'),
+
     /**
      * Localstorage存储
      * @param {string} id 存储ID
@@ -170,6 +170,7 @@ let _util = {
         }
         return obj2;
     },
+
     /**
      * 调用系统默认浏览器打开指定 URL
      * @param {string} url 目标路径以 http/https 开头
@@ -205,13 +206,13 @@ let _util = {
     },
 
     /**
-     * http 客户端
+     * http 客户端 (会使用代理)
      * @param {*} req 请求对象 包括url，body，headers 
      */
     request ( req ) {
         return new Promise ((rs,rj)=>{
             ipcRenderer.send('request', req);
-            ipcRenderer.on('request_callback',function(sender ,data){
+            ipcRenderer.once('request_callback',function(sender ,data){
                 rs(data);
             })
         });

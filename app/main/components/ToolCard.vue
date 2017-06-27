@@ -1,20 +1,20 @@
 <template>
-    <li class="toolcard" @click="toolDetail(tool.name,tool)" :id="tool.name">
+    <li class="toolcard" @click="toolDetail(tool.name,tool)" :id="tool.name" v-once>
         <div class="tool_icon" v-show="width > 250">
             <img class="icon" @error="imgError($event)" :src="tool.icon"  :title="tool.name" :alt="tool.name">
         </div>
         <div class="tool_des">
-            <div class="tool_header" v-if="tool.installed">
+            <div class="tool_header" v-if="installed">
                 <span class="tool_name">{{tool.name}}</span>
                 <span class="tool_star"><i data-v-20967ce4="" aria-hidden="true" class="fa fa-star"></i>{{tool.star}}</span>
                 <span title="基本信息" class="fa fa-info-circle" aria-hidden="true" @click="toolDetail(tool.name,tool)"></span>
                 <span title="检查更新" class="fa fa-arrow-circle-up" aria-hidden="true" @click="checkUpdate"></span>
                 <span title="卸载工具" class="fa fa-trash" aria-hidden="true" @click="removeTool(tool.name)"></span>
             </div>
-            <div class="tool_header" v-if="!tool.installed">
+            <div class="tool_header" v-if="!installed">
                 <span class="tool_name">{{tool.name}}</span>
                 <span class="tool_star"><i data-v-20967ce4="" aria-hidden="true" class="fa fa-star" ></i>{{tool.star}}</span>
-                <span title="安装" class="fa fa-download" aria-hidden="true" @click="toolInstll(tool)"></span>
+                <span title="安装" class="fa fa-download" aria-hidden="true" @click="toolInstall($event, tool)"></span>
             </div>
             <div class="tool_descript">{{tool.descript || "No descript"}}</div> 
             <div class="tool_author">{{tool.author || authorList}}</div>  
@@ -24,12 +24,19 @@
 
 <script>
     import path from 'path';
+    import Saber from "../../common/Saber"
+
     export default {
         computed :{
-            'width' () { return this.$store.state.ToolManager.width}
+            'width' () { return this.$store.state.ToolManager.width},
+            'installed' () { return !!Saber.plugins[this.tool.name]}
         },
-        props: ['tool'],
+        props: ['tool','installed'],
         methods: {
+            toolInstall ( event, tool ){
+                event.stopPropagation();
+                Saber.toolManager.install( tool.url );
+            },
             toolDetail (name,tool) {
                 Store.emit("openToolManager",{
                     type:"tooldetail",
@@ -103,7 +110,11 @@
     .toolcard .tool_header .fa{
         padding: 0 5px;
     }
-    .toolcard .tool_header .fa:hover{
+    .toolcard .tool_header .fa-download{
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+    }
+    .toolcard .tool_header .fa-download:hover{
         color: var(--toolpanel_toolitem_btn_hover_color);
     }
     .tool_des .tool_name{
