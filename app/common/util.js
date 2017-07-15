@@ -24,9 +24,14 @@ let _util = {
     },
 
     //底部消息
-    statusMsg( config, callback) {
-        Saber.statusbar.statusMsg = config.statusMsg;
+    statusMsg( statusMsg, callback) {
+        Store.emit('statusMsg',statusMsg)
         callback && callback.call(saber,saber.statusbar);
+    },
+
+    //重置底部消息
+    statusReset(){
+        Store.emit('statusReset')
     },
 
     //重启

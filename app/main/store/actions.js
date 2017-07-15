@@ -36,3 +36,10 @@ export const newPage = ({commit},name) => {
 export const sendMessage = ({commit}, message) => {
     commit('PUSH_MESSAGE', message)
 }
+
+export const statusMsg = ({commit}, message) => {
+    commit('STATUS_MESSAGE', message);
+}
+export const statusReset = ({commit})=>{
+    commit('STATUS_RESET');
+}

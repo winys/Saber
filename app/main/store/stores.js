@@ -183,8 +183,11 @@ let Statusbar = {
         statusMsg : "欢迎使用 Saber"
     },
     mutations : {
-        'CHAGE_STATUS' (state,item){
-            state.currentView = item.name;
+        'STATUS_MESSAGE' (state, message){
+            state.statusMsg = message;
+        },
+        'STATUS_RESET' (state){
+            state.statusMsg = "欢迎使用 Saber";
         }
     }
 }

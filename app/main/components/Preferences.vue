@@ -58,7 +58,7 @@
             </dd>
         </dl>
         <dl class="card" v-if="devmodel">
-            <dt class="install_tool">本地安装工具</dt>
+            <dt class="install_tool category">本地安装工具</dt>
             <dd class="item">
                 <div class="slide_item">
                     <div class="openfolder" :class="{openfolder_focus:installpath_focus}">
@@ -68,6 +68,13 @@
                 <div class="install_tool_op">
                     <a class="install_start btn" @click="localInstall">安装</a>
                 </div>
+            </dd>
+        </dl>
+
+        <dl class="card" v-if="devmodel">
+            <dt class="category">本地代理</dt>
+            <dd class="item">
+                <input type="text">
             </dd>
         </dl>
     </div>

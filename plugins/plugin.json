@@ -1,2 +1,17 @@
 {
+    "saber-chttp": {
+        "name": "saber-chttp",
+        "icon": "logo.png",
+        "version": "1.0.0",
+        "descript": "模拟发送报文测试器",
+        "author": [
+            "winys 824350760@qq.com"
+        ],
+        "entry": "dist/index.html",
+        "mod": "dev",
+        "multiple": true,
+        "autoupdate": false,
+        "template": "index.html",
+        "style": "index.html"
+    }
 }

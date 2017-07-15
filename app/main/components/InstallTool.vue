@@ -37,15 +37,13 @@
             }
         },
         methods:{
-            searchTool (){
-                Saber.toolManager.search( this.toolurl ).then((data) => {
-                    if ( data.code ){
-                        this.status = 1;
-                        return;
-                    }
-                    
-                    this.formatData(data);
-                });
+            async searchTool (){
+                const data = await Saber.toolManager.search( this.toolurl );
+                if ( data.code ){
+                    this.status = 1;
+                    return;
+                }                    
+                this.formatData(data);
             },
             formatData (data){
                 if(!data || !data.data || !data.data.search) return;
@@ -61,7 +59,10 @@
                 nodes.forEach( (item) => {
                     item.author = item.owner.login;
                     item.star = item.stargazers.totalCount;
-                    item.icon = `https://raw.githubusercontent.com${item.resourcePath}/release/logo.png`
+                    item.icon = `https://raw.githubusercontent.com${item.resourcePath}/release/logo.png`;
+                    if ( Saber.toolManager.hasPlugin( item.name )){
+                        item.installed = true;
+                    }
                 });
                 this.nodes = nodes;
             }

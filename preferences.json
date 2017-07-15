@@ -5,9 +5,10 @@
     "mini_method":"alternative",
     "close": "close",
     "devmodel":false,
-    "token": "d61bd9dd3361023274d40d26d2d3abdb72c16c79",    
+    "token": "a2ccb9344b1c86a3084fb9a81932ebfbcd79b739",    
     "global_hotkey":[],
     "local_hotkey":[],    
     "main_offset" :[],
-    "mini_offset" :[]
+    "mini_offset" :[],
+    "proxy": ""
 }

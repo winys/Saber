@@ -4,20 +4,21 @@
             <img class="icon" @error="imgError($event)" :src="tool.icon"  :title="tool.name" :alt="tool.name">
         </div>
         <div class="tool_des">
-            <div class="tool_header" v-if="installed">
+            <div class="tool_header" v-if="tool.installed">
                 <span class="tool_name">{{tool.name}}</span>
-                <span class="tool_star"><i data-v-20967ce4="" aria-hidden="true" class="fa fa-star"></i>{{tool.star}}</span>
                 <span title="基本信息" class="fa fa-info-circle" aria-hidden="true" @click="toolDetail(tool.name,tool)"></span>
                 <span title="检查更新" class="fa fa-arrow-circle-up" aria-hidden="true" @click="checkUpdate"></span>
                 <span title="卸载工具" class="fa fa-trash" aria-hidden="true" @click="removeTool(tool.name)"></span>
             </div>
-            <div class="tool_header" v-if="!installed">
+            <div class="tool_header" v-if="!tool.installed">
                 <span class="tool_name">{{tool.name}}</span>
-                <span class="tool_star"><i data-v-20967ce4="" aria-hidden="true" class="fa fa-star" ></i>{{tool.star}}</span>
                 <span title="安装" class="fa fa-download" aria-hidden="true" @click="toolInstall($event, tool)"></span>
             </div>
             <div class="tool_descript">{{tool.descript || "No descript"}}</div> 
-            <div class="tool_author">{{tool.author || authorList}}</div>  
+            <div class="tool_author">
+                <span class="author">{{tool.author || "Unknown author" }} </span>
+                <span class="tool_star">{{tool.star}}<i aria-hidden="true" class="fa fa-star" ></i></span>
+            </div>  
         </div> 
     </li>
 </template>
@@ -29,13 +30,12 @@
     export default {
         computed :{
             'width' () { return this.$store.state.ToolManager.width},
-            'installed' () { return !!Saber.plugins[this.tool.name]}
         },
-        props: ['tool','installed'],
+        props: ['tool'],
         methods: {
             toolInstall ( event, tool ){
                 event.stopPropagation();
-                Saber.toolManager.install( tool.url );
+                Saber.toolManager.install( tool );
             },
             toolDetail (name,tool) {
                 Store.emit("openToolManager",{
@@ -114,7 +114,7 @@
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
     }
-    .toolcard .tool_header .fa-download:hover{
+    .toolcard .tool_header .fa:hover{
         color: var(--toolpanel_toolitem_btn_hover_color);
     }
     .tool_des .tool_name{
@@ -123,16 +123,6 @@
         text-overflow: ellipsis;
         overflow: hidden;
         flex: 1;
-    }
-    .tool_des .tool_star{
-        opacity: 1;
-        font-size: 80%;
-        padding-left: 6px;
-        min-width: 40px;     
-           
-    }
-    .tool_des .tool_star .fa-star{
-        color: #ffa700;
     }
     .tool_des .tool_descript{
         overflow: hidden;
@@ -143,8 +133,25 @@
     .tool_des .tool_author{
         font-size: 90%;
         padding-right: 6px;
-        opacity: .6;
         font-weight: 600;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        justify-content: space-around;
+    }
+    .tool_author .author {
+        flex: 1;
+        opacity: .6;
+    }
+    .tool_des .tool_star{
+        opacity: 1;
+        font-size: 80%;
+        padding-left: 6px;
+        letter-spacing: 2px;    
+           
+    }
+    .tool_des .tool_star .fa-star{
+        color: #ffa700;
     }
     .toolcard .tool_des .tool_footer{
         display:flex;

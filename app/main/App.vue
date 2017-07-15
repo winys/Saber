@@ -46,11 +46,6 @@ html,body{
   width: 100%;  
   font-family: var(--fontFamily);
 }
-@media screen and (min-width: 1500px) {
-  body{
-    zoom: 1.25;
-  }
-}
 input[type=text]{
     width: 100%;
     height: 28px;
